@@ -1,0 +1,138 @@
+package gui;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
+
+import bus.Bus_TaiKhoan;
+import entity.TaiKhoan;
+
+public class GUI_Login extends JFrame {
+	private Bus_TaiKhoan bus_tk = new Bus_TaiKhoan();
+	private JTextField txtUserName, txtPassword;
+	private JButton btnLogin;
+
+	public GUI_Login() {
+		setTitle("Mời đăng nhập");
+		setSize(600, 400);
+		setResizable(false);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
+
+		createFormLogin();
+
+	}
+
+	private void createFormLogin() {
+		setTitle("Login Form");
+		setSize(400, 300);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+		// Tạo panel để chứa các thành phần của form login
+		JPanel panel = new JPanel(new GridLayout(3, 2));
+
+		// Tạo các thành phần của form login
+		JLabel usernameLabel = new JLabel("Username:");
+		JTextField usernameField = new JTextField();
+		JLabel passwordLabel = new JLabel("Password:");
+		JPasswordField passwordField = new JPasswordField();
+		JButton loginButton = new JButton("Login");
+		JButton cancelButton = new JButton("Cancel");
+
+		// Thêm các thành phần vào panel
+		panel.add(usernameLabel);
+		panel.add(usernameField);
+		panel.add(passwordLabel);
+		panel.add(passwordField);
+		panel.add(loginButton);
+		panel.add(cancelButton);
+
+		// Tạo label để chứa hình ảnh nền
+		JLabel background = new JLabel(new ImageIcon("img/bg.jpg"));
+
+		// Đặt kích thước và vị trí cho label
+		background.setBounds(0, 0, 400, 300);
+
+		// Thêm label vào panel
+		panel.add(background);
+
+		// Đặt panel làm nội dung cho form login
+		setContentPane(panel);
+
+//		JPanel pnBg = new JPanel();
+//		add(pnBg, BorderLayout.CENTER);
+//		pnBg.setBackground(Color.cyan);
+//
+//		pnBg.setLayout(null);
+//		JLabel lblUser, lblPass;
+//		lblUser = new JLabel("UserName:");
+//		lblPass = new JLabel("Password");
+//		txtUserName = new JTextField();
+//		txtPassword = new JTextField();
+//		btnLogin = new JButton("Login");
+//		pnBg.add(lblUser);
+//		pnBg.add(lblPass);
+//		pnBg.add(txtUserName);
+//		pnBg.add(txtPassword);
+//		pnBg.add(btnLogin);
+//
+//		lblUser.setBounds(170, 80, 100, 30);
+//		txtUserName.setBounds(240, 80, 150, 30);
+//		txtUserName.setBorder(BorderFactory.createBevelBorder(10));
+//		lblPass.setBounds(170, 115, 100, 30);
+//		txtPassword.setBounds(240, 115, 150, 30);
+//		txtPassword.setBorder(BorderFactory.createBevelBorder(10));
+//		btnLogin.setBounds(240, 150, 100, 30);
+//		
+//		btnLogin.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				checkLogin();
+//
+//			}
+//		});
+
+	}
+
+//	private boolean checkLogin() {
+//		bus_tk = new Bus_TaiKhoan();
+//		ArrayList<TaiKhoan> dsTK = bus_tk.getAllTaiKhoan();
+//
+//		String user = txtUserName.getText().trim();
+//		String pass = txtPassword.getText().trim();
+//
+//		for (TaiKhoan tk : dsTK) {
+//			if (user.equals(tk.getMaNV())) {
+//				if (pass.equals(tk.getPass())) {
+//					JOptionPane.showMessageDialog(this, "than cong");
+//					new GUI_QLKhachSan().setVisible(true);
+//					return true;
+//				} else {
+//					JOptionPane.showMessageDialog(this, "sai mat khau");
+//					return false;
+//				}
+//			}
+//		}
+//		JOptionPane.showMessageDialog(this, "Nhap lai");
+//		return false;
+//	}
+
+	public static void main(String[] args) {
+		new GUI_Login().setVisible(true);
+	}
+
+}

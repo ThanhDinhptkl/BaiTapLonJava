@@ -1,0 +1,77 @@
+package dao;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import connectDB.ConnectDB;
+import entity.TaiKhoan;
+import interfaces.I_TaiKhoan;
+
+public class Dao_TaiKhoan implements I_TaiKhoan {
+
+	public Dao_TaiKhoan() {
+
+	}
+
+	@Override
+	public ArrayList<TaiKhoan> getAllTaiKhoan() {
+		ArrayList<TaiKhoan> dsTK = new ArrayList<TaiKhoan>();
+		try {
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+
+			String sql = "Select * from TaiKhoan";
+			Statement sta = con.createStatement();
+
+			ResultSet rs = sta.executeQuery(sql);
+
+			while (rs.next()) {
+				String maTK = rs.getString("MATK");
+				String maNV = rs.getString("MANV");
+				String uid = rs.getString("UID");
+				String pass = rs.getString("PASS");
+				String quyen = rs.getString("QUYEN");
+				
+				TaiKhoan tk = new TaiKhoan(maTK, maNV, uid, pass, quyen);
+				dsTK.add(tk);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return dsTK;
+	}
+
+	@Override
+	public ArrayList<TaiKhoan> getTheoMaTK(String maTK) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ArrayList<TaiKhoan> getTheoMaNV(String maNV) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean them(TaiKhoan tk) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean capNhat(TaiKhoan tk) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean xoa(String maTK) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

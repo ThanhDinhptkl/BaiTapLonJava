@@ -1,0 +1,14 @@
+package gui;
+
+import javax.swing.JFrame;
+
+public class GUI_QLKhachSan extends JFrame{
+	public GUI_QLKhachSan() {
+		setTitle("Quan ly khach san");
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		new GUI_QLKhachSan().setVisible(true);
+	}
+
+}
