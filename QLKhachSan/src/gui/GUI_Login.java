@@ -17,14 +17,19 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import bus.Bus_NhanVien;
 import bus.Bus_TaiKhoan;
+import entity.NhanVien;
 import entity.TaiKhoan;
 
 public class GUI_Login extends JFrame implements ActionListener {
-	private Bus_TaiKhoan bus_tk = new Bus_TaiKhoan();
+	private static final long serialVersionUID = 1L;
 	private JTextField txtUserName;
 	private JPasswordField txtPassword;
 	private JButton btnLogin, btnReset;
+	
+	private Bus_TaiKhoan bus_tk = new Bus_TaiKhoan();
+	private Bus_NhanVien bus_nv = new Bus_NhanVien();
 
 	public GUI_Login() {
 		setTitle("System Login");
@@ -79,11 +84,13 @@ public class GUI_Login extends JFrame implements ActionListener {
 		btnLogin.addActionListener(this);
 		btnReset.addActionListener(this);
 		
+		txtUserName.setText("21032352");
+		txtPassword.setText("1");
+		
 		setVisible(true);
 	}
 
 	private boolean checkLogin() {
-		bus_tk = new Bus_TaiKhoan();
 		ArrayList<TaiKhoan> dsTK = bus_tk.getAllTaiKhoan();
 
 		String user = txtUserName.getText().trim();
@@ -102,12 +109,14 @@ public class GUI_Login extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(this, sb.toString(), "Cảnh báo", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
-
+		
 		for (TaiKhoan tk : dsTK) {
 			if (user.equals(tk.getMaNV())) {
+				String maNV = tk.getMaNV();
 				if (pass.equals(tk.getPass())) {
+					NhanVien nv = bus_nv.getTheoMaNV(maNV).get(0);
 					setVisible(false);
-					new GUI_QLKhachSan().setVisible(true);
+					new GUI_QLKhachSan(nv).setVisible(true);
 					return true;
 				} else {
 					JOptionPane.showMessageDialog(this, "Nhập sai mật khẩu", "Nhập lại", JOptionPane.ERROR_MESSAGE);
@@ -133,10 +142,6 @@ public class GUI_Login extends JFrame implements ActionListener {
 			txtUserName.requestFocus();
 		}
 
-	}
-	
-	public static void main(String[] args) {
-		new GUI_Login();
 	}
 
 }
