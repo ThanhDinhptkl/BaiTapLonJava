@@ -16,7 +16,7 @@ public class Bus_TaiKhoan implements I_TaiKhoan{
 	}
 
 	@Override
-	public ArrayList<TaiKhoan> getTheoMaTK(String maTK) {
+	public TaiKhoan getTheoMaTK(String maTK) {
 		// TODO Auto-generated method stub
 		return dao_tk.getTheoMaTK(maTK);
 	}

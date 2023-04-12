@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import connectDB.ConnectDB;
+import entity.NhanVien;
 import entity.TaiKhoan;
 import interfaces.I_TaiKhoan;
 
@@ -31,11 +32,11 @@ public class Dao_TaiKhoan implements I_TaiKhoan {
 
 			while (rs.next()) {
 				String idTK = rs.getString("MATK");
-				String maNV = rs.getString("MANV");
+				NhanVien nv = new NhanVien(rs.getString("MANV"));
 				String pass = rs.getString("PASS");
 				String quyen = rs.getString("QUYEN");
 
-				TaiKhoan tk = new TaiKhoan(idTK, maNV, pass, quyen);
+				TaiKhoan tk = new TaiKhoan(idTK, nv, pass, quyen);
 				dsTK.add(tk);
 			}
 		} catch (SQLException e) {
@@ -45,8 +46,8 @@ public class Dao_TaiKhoan implements I_TaiKhoan {
 	}
 
 	@Override
-	public ArrayList<TaiKhoan> getTheoMaTK(String maTK) {
-		ArrayList<TaiKhoan> dsTK = new ArrayList<TaiKhoan>();
+	public TaiKhoan getTheoMaTK(String maTK) {
+		TaiKhoan tk = null;
 		PreparedStatement sta = null;
 		try {
 			ConnectDB.getInstance();
@@ -56,15 +57,13 @@ public class Dao_TaiKhoan implements I_TaiKhoan {
 			sta.setString(1, maTK);
 
 			ResultSet rs = sta.executeQuery();
-
 			while (rs.next()) {
-				String idTK = rs.getString("MATK");
-				String maNV = rs.getString("MANV");
-				String pass = rs.getString("PASS");
-				String quyen = rs.getString("QUYEN");
+			String idTK = rs.getString("MATK");
+			NhanVien nv = new NhanVien(rs.getString("MANV"));
+			String pass = rs.getString("PASS");
+			String quyen = rs.getString("QUYEN");
 
-				TaiKhoan tk = new TaiKhoan(maTK, maNV, pass, quyen);
-				dsTK.add(tk);
+			tk = new TaiKhoan(idTK, nv, pass, quyen);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -75,7 +74,7 @@ public class Dao_TaiKhoan implements I_TaiKhoan {
 				e.printStackTrace();
 			}
 		}
-		return dsTK;
+		return tk;
 	}
 
 	@Override
@@ -93,11 +92,11 @@ public class Dao_TaiKhoan implements I_TaiKhoan {
 
 			while (rs.next()) {
 				String idTK = rs.getString("MATK");
-				String idNV = rs.getString("MANV");
+				NhanVien nv = new NhanVien(rs.getString("MANV"));
 				String pass = rs.getString("PASS");
 				String quyen = rs.getString("QUYEN");
 
-				TaiKhoan tk = new TaiKhoan(idNV, maNV, pass, quyen);
+				TaiKhoan tk = new TaiKhoan(idTK, nv, pass, quyen);
 				dsTK.add(tk);
 			}
 		} catch (SQLException e) {
@@ -123,7 +122,7 @@ public class Dao_TaiKhoan implements I_TaiKhoan {
 			sta = con.prepareStatement(sql);
 
 			sta.setString(1, tk.getMaTK());
-			sta.setString(2, tk.getMaNV());
+			sta.setString(2, tk.getNv().getMaNV());
 			sta.setString(3, tk.getPass());
 			sta.setString(4, tk.getQuyen());
 			n = sta.executeUpdate();
@@ -146,18 +145,18 @@ public class Dao_TaiKhoan implements I_TaiKhoan {
 		try {
 			ConnectDB.getInstance();
 			Connection con = ConnectDB.getConnection();
-			
+
 			String sql = "update TaiKhoan set PASS = ?, QUYEN = ? where MATK = ? or MANV = ?";
 			sta = con.prepareStatement(sql);
 
 			sta.setString(1, tk.getPass());
 			sta.setString(2, tk.getQuyen());
 			sta.setString(3, tk.getMaTK());
-			sta.setString(4, tk.getMaNV());
+			sta.setString(4, tk.getNv().getMaNV());
 			n = sta.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			try {
 				sta.close();
 			} catch (SQLException e) {
@@ -174,10 +173,10 @@ public class Dao_TaiKhoan implements I_TaiKhoan {
 		try {
 			ConnectDB.getInstance();
 			Connection con = ConnectDB.getConnection();
-			
+
 			String sql = "delete from TaiKhoan where MATK = ?";
 			sta = con.prepareStatement(sql);
-			
+
 			sta.setString(1, maTK);
 			n = sta.executeUpdate();
 		} catch (Exception e) {

@@ -7,7 +7,7 @@ import entity.NhanVien;
 public interface I_NhanVien {
 public ArrayList<NhanVien> getAllNhanVien();
 	
-	public ArrayList<NhanVien> getTheoMaNV(String maNV);
+	public NhanVien getTheoMaNV(String maNV);
 	
 	public ArrayList<NhanVien> getTheoHoTen(String hoTen);
 	

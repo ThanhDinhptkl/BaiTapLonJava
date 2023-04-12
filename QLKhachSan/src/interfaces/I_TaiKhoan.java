@@ -7,7 +7,7 @@ import entity.TaiKhoan;
 public interface I_TaiKhoan {
 	public ArrayList<TaiKhoan> getAllTaiKhoan();
 	
-	public ArrayList<TaiKhoan> getTheoMaTK(String maTK);
+	public TaiKhoan getTheoMaTK(String maTK);
 	
 	public ArrayList<TaiKhoan> getTheoMaNV(String maNV);
 	
