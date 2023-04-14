@@ -1,5 +1,0 @@
-INDEX VERSION 1.132+D:\BaiTapLonJava\.metadata\.plugins\org.eclipse.jdt.core
-3989851870.index
-3762534285.index
-1865797976.index
-1910592564.index
