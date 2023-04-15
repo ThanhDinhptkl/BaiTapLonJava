@@ -41,7 +41,7 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 	private JPanel pnCenter;
 	private DefaultTableModel model;
 	private JTable table;
-	private JTextField txtManv, txtHoTen, txtSDT, txtTuoi, txtLuong, txtTimKiem;
+	private JTextField txtManv, txtHoTen, txtSDT, txtTuoi, txtLuong, txtTimKiem, txtMess;
 	private JLabel lblManv, lblHoTen, lblSDT, lblTuoi, lblPhai, lblTienLuong;
 	private JButton btnTim, btnThem, btnXoaTrang, btnXoa, btnSua, btnReset, btnRanDom;
 	private JRadioButton radNam, radNu, radMaNV, radSDT;
@@ -85,6 +85,7 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 		Box b2 = Box.createHorizontalBox();
 		Box b3 = Box.createHorizontalBox();
 		Box b4 = Box.createHorizontalBox();
+		Box b5 = Box.createHorizontalBox();
 
 		pnCenter.add(b);
 
@@ -96,6 +97,9 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 		b.add(Box.createVerticalStrut(5));
 		b.add(b4);
 		b.add(Box.createVerticalStrut(5));
+		b.add(b5);
+		b.add(Box.createVerticalStrut(5));
+
 		pnCenter.add(Box.createVerticalStrut(10));
 
 		lblManv = new JLabel("Mã nhân viên: ");
@@ -139,6 +143,13 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 		b4.add(lblTienLuong);
 		b4.add(txtLuong);
 		lblTienLuong.setPreferredSize(lblManv.getPreferredSize());
+
+		txtMess = new JTextField();
+		txtMess.setEditable(false);
+		txtMess.setFont(new Font("Arial", Font.ITALIC, 12));
+		txtMess.setBorder(null);
+		txtMess.setForeground(Color.red);
+		b5.add(txtMess);
 
 		taoBang();
 		pnBorder.add(pnCenter, BorderLayout.CENTER);
@@ -197,7 +208,7 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 
 		JScrollPane sp = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		sp.setPreferredSize(new Dimension(1000, 430));
+		sp.setPreferredSize(new Dimension(1000, 400));
 		pnCenter.add(sp);
 	}
 
@@ -221,8 +232,60 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 	}
 
 	public boolean validDate() {
+		String hoTen = txtHoTen.getText().trim();
+		String sdt = txtSDT.getText().trim();
+		String tuoi = txtTuoi.getText().trim();
+		String luong = txtLuong.getText().trim();
 
+		if (!hoTen.matches("^[A-Z][a-z]+((\s[A-Z][a-z]*)+)$")) {
+			txtMess.setText("Tên chỉ chứa các ký tự chữ cái có thể gồm nhiều từ ngăn cách bởi dấu khoảng trắng");
+			return false;
+		}
+		if (!sdt.matches("^0\\d{9}")) {
+			txtMess.setText("SDT bắt đầu bằng 0 và có tổng cộng 10 số");
+			return false;
+		}
+		if (!isInt(tuoi)) {
+			txtMess.setText("Tuổi phải là số");
+			return false;
+		} else {
+			int t = Integer.parseInt(txtTuoi.getText());
+			if (t < 18 || t > 60) {
+				txtMess.setText("Tuổi phỉ từ 18-60");
+				return false;
+			}
+		}
+		if (!isFloat(luong)) {
+			txtMess.setText("Lương phải là số và không có dấu ,");
+			return false;
+		} else {
+			float l = Float.parseFloat(txtLuong.getText());
+			if (l < 0) {
+				txtMess.setText("Lương >= 0");
+				return false;
+			}
+		}
+
+		txtMess.setText("");
 		return true;
+	}
+
+	public boolean isFloat(String s) {
+		try {
+			Float.parseFloat(s);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
+	public boolean isInt(String s) {
+		try {
+			Integer.parseInt(s);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
 	}
 
 	public NhanVien revertNhanVienFromFields() {
@@ -239,7 +302,7 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 	public void sua() {
 		int r = table.getSelectedRow();
 		if (r == -1) {
-			JOptionPane.showMessageDialog(null, "Ban chua chon dong de sửa");
+			JOptionPane.showMessageDialog(null, "Bạn chưa chọn dòng để sửa");
 		} else {
 			if (validDate()) {
 				NhanVien nvMoi = revertNhanVienFromFields();
@@ -336,6 +399,7 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 		}
 
 	}
+
 	public String formatLuong(float luong) {
 		DecimalFormat df = new DecimalFormat("#,##0.00");
 		String tien = df.format(luong);

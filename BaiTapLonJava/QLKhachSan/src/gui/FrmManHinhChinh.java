@@ -28,7 +28,7 @@ import entity.TaiKhoan;
 
 public class FrmManHinhChinh extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private JButton btnHome, btnPhong, btnTang, btnDichVu, btnDatPhong, btnThanhToan, btnDangXuat, btnDoiMK,
+	private JButton btnHome, btnPhong, btnDichVu, btnDatPhong, btnDangXuat, btnDoiMK,
 			btnNhanVien;
 	public static JButton btnTaiKhoan;
 	private JTextField txtMaNV, txtHoTenNV;
@@ -36,6 +36,8 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 	private JPanel pnLeft;
 	private JPanel pnBorder;
 	private JPanel pnHome;
+	private JPanel pnDatPhong;
+	private JPanel pnDichVu;
 	private JPanel pnPhong;
 	private JPanel pnTaiKhoan;
 
@@ -47,6 +49,10 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 
 	private FrmNhanVien frmNhanVien = new FrmNhanVien();
 	private FrmTaiKhoan frmTaiKhoan = new FrmTaiKhoan();
+	private FrmDatPhong frmDatPhong = new FrmDatPhong();
+	private FrmPhong frmPhong = new FrmPhong();
+	private FrmDichVu frmDichVu = new FrmDichVu();
+	
 
 	public FrmManHinhChinh(TaiKhoan taiKhoan) {
 		TaiKhoanlogin = taiKhoan;
@@ -79,18 +85,16 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 
 		btnHome = new JButton("     Home     ");
 		btnNhanVien = new JButton("QL Nhân Viên");
-		btnPhong = new JButton("     Phòng    ");
-		btnTang = new JButton("      Tầng      ");
-		btnDichVu = new JButton("   Dịch Vụ    ");
 		btnDatPhong = new JButton(" Đặt Phòng ");
+		btnPhong = new JButton("Phòng");
 		btnTaiKhoan = new JButton("Tài Khoản");
-		btnThanhToan = new JButton("Thanh Toán");
+		btnDichVu = new JButton("Dich Vụ");
 
 		pnLeft.add(btnHome, BorderLayout.CENTER);
 		pnLeft.add(btnNhanVien, BorderLayout.CENTER);
 		pnLeft.add(btnDatPhong, BorderLayout.CENTER);
 		pnLeft.add(btnTaiKhoan, BorderLayout.CENTER);
-		pnLeft.add(btnThanhToan, BorderLayout.CENTER);
+		pnLeft.add(btnDichVu, BorderLayout.CENTER);
 
 		Box b = Box.createVerticalBox();
 		Box bHome = Box.createHorizontalBox();
@@ -102,25 +106,20 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		bQLNhanVien.add(btnNhanVien);
 		b.add(bQLNhanVien);
 		b.add(Box.createVerticalStrut(5));
-
-		Box bPhong = Box.createHorizontalBox();
-		bPhong.add(btnPhong);
-		b.add(bPhong);
-		b.add(Box.createVerticalStrut(5));
-
-		Box bTang = Box.createHorizontalBox();
-		bTang.add(btnTang);
-		b.add(bTang);
-		b.add(Box.createVerticalStrut(5));
-
-		Box bDV = Box.createHorizontalBox();
-		bDV.add(btnDichVu);
-		b.add(bDV);
+		
+		Box bQLPhong = Box.createHorizontalBox();
+		bQLPhong.add(btnPhong);
+		b.add(bQLPhong);
 		b.add(Box.createVerticalStrut(5));
 
 		Box bTaiKhoan = Box.createHorizontalBox();
 		bTaiKhoan.add(btnTaiKhoan);
 		b.add(bTaiKhoan);
+		b.add(Box.createVerticalStrut(5));
+		
+		Box bDichVu = Box.createHorizontalBox();
+		bDichVu.add(btnDichVu);
+		b.add(bDichVu);
 		b.add(Box.createVerticalStrut(5));
 
 		Box bDatPhong = Box.createHorizontalBox();
@@ -128,9 +127,6 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		b.add(bDatPhong);
 		b.add(Box.createVerticalStrut(5));
 
-		Box bThanhToan = Box.createHorizontalBox();
-		bThanhToan.add(btnThanhToan);
-		b.add(bThanhToan);
 		pnLeft.add(b, BorderLayout.NORTH);
 	}
 
@@ -191,22 +187,30 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		JLabel lblHome = new JLabel(new ImageIcon("img/home.png"));
 		pnHome.add(lblHome);
 
-		pnPhong = new JPanel();
-		JLabel lblPhong = new JLabel(new ImageIcon("img/bg.png"));
-		pnPhong.add(lblPhong);
-
 		pnQLNhanVien = new JPanel();
 		pnQLNhanVien.add(frmNhanVien.contentPane);
 		
 		pnTaiKhoan = new JPanel();
 		pnTaiKhoan.add(frmTaiKhoan.contentPane);
+		
+		pnDatPhong = new JPanel();
+		pnDatPhong.add(frmDatPhong.contentPane);
+		
+		pnPhong = new JPanel();
+		pnPhong.add(frmPhong.contentPane);
+		
+		pnDichVu = new JPanel();
+		pnDichVu.add(frmDichVu.contentPane);
 
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new CardLayout());
 		mainPanel.add(pnHome, "Panel Home");
-		mainPanel.add(pnPhong, "Panel Phong");
 		mainPanel.add(pnQLNhanVien, "pnQL NhanVien");
 		mainPanel.add(pnTaiKhoan, "Panel TaiKhoan");
+		mainPanel.add(pnDatPhong, "Panel DatPhong");
+		mainPanel.add(pnPhong, "Panel Phong");
+		mainPanel.add(pnDichVu, "Panel DichVu");
+
 
 		pnBorder.add(mainPanel, BorderLayout.CENTER);
 	}
@@ -226,10 +230,25 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 			}
 		});
 
+		
+		btnDatPhong.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				CardLayout c = (CardLayout) (pnDatPhong.getParent().getLayout());
+				c.show(pnDatPhong.getParent(), "Panel DatPhong");
+			}
+		});
+		
 		btnPhong.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				CardLayout c = (CardLayout) (pnPhong.getParent().getLayout());
 				c.show(pnPhong.getParent(), "Panel Phong");
+			}
+		});
+		
+		btnDichVu.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				CardLayout c = (CardLayout) (pnDichVu.getParent().getLayout());
+				c.show(pnDichVu.getParent(), "Panel DichVu");
 			}
 		});
 		

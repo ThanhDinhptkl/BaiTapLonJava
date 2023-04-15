@@ -85,7 +85,7 @@ public class FrmLogin extends JFrame implements ActionListener {
 		btnReset.addActionListener(this);
 
 		txtUserName.setText("21032351");
-		txtPassword.setText("1");
+		txtPassword.setText("1111");
 
 		setVisible(true);
 	}
