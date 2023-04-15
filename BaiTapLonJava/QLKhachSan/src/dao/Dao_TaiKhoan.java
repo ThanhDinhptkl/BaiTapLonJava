@@ -141,8 +141,15 @@ public class Dao_TaiKhoan implements I_TaiKhoan {
 
 			sta.setString(1, maTK);
 			n = sta.executeUpdate();
-		} catch (Exception e) {
-			// TODO: handle exception
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				sta.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return n > 0;
 	}

@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -30,6 +31,7 @@ public class FrmPhong extends JFrame implements ActionListener{
 	private JPopupMenu popupMenu;
 	private JPanel roomPanel;
 	private JMenuItem itDatPhong,itTraPhong,itDoiPhong,itDonPhong,itSuaPhong,itXemThongTinKhach,itCapNhatDichVu;
+	private JComboBox<String> cboTang;
 	public FrmPhong() {
 		super("Quản lý phòng");
 		setSize(1050, 700);
@@ -43,6 +45,16 @@ public class FrmPhong extends JFrame implements ActionListener{
 		pnBorder.setLayout(new BorderLayout());
 //		pnBorder.setBackground(Color.red);
 		pnBorder.setBorder(BorderFactory.createTitledBorder("Danh sách phòng"));
+		
+		JPanel pnNorth = new JPanel();
+		JLabel lblLocTang = new JLabel("Lọc theo tầng");
+		pnNorth.add(lblLocTang);
+		cboTang = new JComboBox<String>();
+		cboTang.addItem("Tầng 1");
+		cboTang.addItem("Tầng 2");
+		cboTang.addItem("Tầng 3");
+		pnNorth.add(cboTang);
+		pnBorder.add(pnNorth, BorderLayout.NORTH);
 		
 		
 		// Tạo panel chứa danh sách phòng

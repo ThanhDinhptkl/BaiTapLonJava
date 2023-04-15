@@ -37,6 +37,7 @@ public class FrmDatPhong extends JFrame implements WindowListener{
 	private JTable table;
 	private DefaultTableModel tableModel;
 	private JDateChooser dateNgayDat,dateNgayNhan,dateNgayTra;
+	
 	public FrmDatPhong() {
 		super("Đặt Phòng");
 		setSize(1050, 700);

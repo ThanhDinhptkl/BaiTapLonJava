@@ -11,31 +11,26 @@ public class Bus_TaiKhoan implements I_TaiKhoan{
 	
 	@Override
 	public ArrayList<TaiKhoan> getAllTaiKhoan() {
-		// TODO Auto-generated method stub
 		return dao_tk.getAllTaiKhoan();
 	}
 
 	@Override
 	public TaiKhoan getTheoMaTK(String maTK) {
-		// TODO Auto-generated method stub
 		return dao_tk.getTheoMaTK(maTK);
 	}
 
 	@Override
 	public boolean them(TaiKhoan tk) {
-		// TODO Auto-generated method stub
 		return dao_tk.them(tk);
 	}
 
 	@Override
 	public boolean capNhat(TaiKhoan tk) {
-		// TODO Auto-generated method stub
 		return dao_tk.capNhat(tk);
 	}
 
 	@Override
 	public boolean xoa(String maTK) {
-		// TODO Auto-generated method stub
 		return dao_tk.xoa(maTK);
 	}
 
