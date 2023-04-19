@@ -38,4 +38,5 @@ public class Bus_ChiTietDatPhong implements I_ChiTietDatPhong{
 	public boolean xoa(String idHD, String idMP) {
 		return dao_ct.xoa(idHD, idMP);
 	}
+
 }

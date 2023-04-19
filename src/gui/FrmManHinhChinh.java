@@ -29,7 +29,11 @@ import entity.TaiKhoan;
 public class FrmManHinhChinh extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JButton btnHome, btnPhong, btnDichVu, btnDatPhong, btnDangXuat, btnDoiMK,
+
 			btnNhanVien,btnBaoCao;
+
+			btnNhanVien;
+
 	public static JButton btnTaiKhoan;
 	private JTextField txtMaNV, txtHoTenNV;
 
@@ -40,7 +44,9 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 	private JPanel pnDichVu;
 	private JPanel pnPhong;
 	private JPanel pnTaiKhoan;
+
 	private JPanel pnBaoCao;
+
 
 	private TaiKhoan TaiKhoanlogin;
 	private Bus_NhanVien nhanVien_bus = new Bus_NhanVien();
@@ -53,7 +59,9 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 	private FrmDatPhong frmDatPhong = new FrmDatPhong();
 	private FrmPhong frmPhong = new FrmPhong();
 	private FrmDichVu frmDichVu = new FrmDichVu();
+
 	private FrmBaoCao frmBaoCao=new FrmBaoCao();
+
 	
 
 	public FrmManHinhChinh(TaiKhoan taiKhoan) {
@@ -91,14 +99,18 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		btnPhong = new JButton("Phòng");
 		btnTaiKhoan = new JButton("Tài Khoản");
 		btnDichVu = new JButton("Dich Vụ");
+
 		btnBaoCao=new JButton("Báo cáo");
+
 
 		pnLeft.add(btnHome, BorderLayout.CENTER);
 		pnLeft.add(btnNhanVien, BorderLayout.CENTER);
 		pnLeft.add(btnDatPhong, BorderLayout.CENTER);
 		pnLeft.add(btnTaiKhoan, BorderLayout.CENTER);
 		pnLeft.add(btnDichVu, BorderLayout.CENTER);
+
 		pnLeft.add(btnBaoCao,BorderLayout.CENTER);
+
 
 		Box b = Box.createVerticalBox();
 		Box bHome = Box.createHorizontalBox();
@@ -130,11 +142,13 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		bDatPhong.add(btnDatPhong);
 		b.add(bDatPhong);
 		b.add(Box.createVerticalStrut(5));
+
 		
 		Box bBaoCao = Box.createHorizontalBox();
 		bBaoCao.add(btnBaoCao);
 		b.add(bBaoCao);
 		b.add(Box.createVerticalStrut(5));
+
 
 		pnLeft.add(b, BorderLayout.NORTH);
 	}
@@ -210,9 +224,11 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		
 		pnDichVu = new JPanel();
 		pnDichVu.add(frmDichVu.contentPane);
+
 		
 		pnBaoCao=new JPanel();
 		pnBaoCao.add(frmBaoCao.contentPane);
+
 
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new CardLayout());
@@ -222,7 +238,9 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		mainPanel.add(pnDatPhong, "Panel DatPhong");
 		mainPanel.add(pnPhong, "Panel Phong");
 		mainPanel.add(pnDichVu, "Panel DichVu");
+
 		mainPanel.add(pnBaoCao,"Panel BaoCao");
+
 
 
 		pnBorder.add(mainPanel, BorderLayout.CENTER);
@@ -271,6 +289,7 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 				c.show(pnTaiKhoan.getParent(), "Panel TaiKhoan");
 			}
 		});
+
 		
 		btnBaoCao.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -278,6 +297,7 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 				c.show(pnBaoCao.getParent(), "Panel BaoCao");
 			}
 		});
+
 
 	}
 
