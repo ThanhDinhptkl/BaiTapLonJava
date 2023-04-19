@@ -39,10 +39,5 @@ public class Bus_ChiTietDatPhong implements I_ChiTietDatPhong{
 		return dao_ct.xoa(idHD, idMP);
 	}
 
-	@Override
-	public ArrayList<ChiTietDatPhong> joinWithPhong(String maPhong) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }
