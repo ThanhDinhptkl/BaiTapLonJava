@@ -1,9 +1,0 @@
-package gui;
-
-import javax.swing.JFrame;
-
-public class GUI_QLKhachSan extends JFrame{
-	public GUI_QLKhachSan() {
-		setTitle("Quan ly khach san");
-	}
-}
