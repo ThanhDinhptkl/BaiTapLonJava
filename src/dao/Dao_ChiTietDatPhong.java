@@ -214,13 +214,6 @@ public class Dao_ChiTietDatPhong implements I_ChiTietDatPhong {
 		return n > 0;
 	}
 
-	@Override
-	public ArrayList<ChiTietDatPhong> joinWithPhong(String maPhong) {
-		ArrayList<ChiTietDatPhong> dsCT = null;
-		// TODO Auto-generated method stub
-		return dsCT;
-	}
-
 	
 
 }
