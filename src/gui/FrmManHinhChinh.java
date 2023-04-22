@@ -28,7 +28,8 @@ import entity.TaiKhoan;
 
 public class FrmManHinhChinh extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private JButton btnHome, btnPhong, btnDichVu, btnDatPhong, btnDangXuat, btnDoiMK,btnNhanVien,btnBaoCao;
+
+	private JButton btnHome, btnPhong, btnDichVu, btnDatPhong, btnDangXuat, btnDoiMK,btnNhanVien,btnBaoCao,selectedButton;
 
 	public static JButton btnTaiKhoan;
 	private JTextField txtMaNV, txtHoTenNV;
@@ -94,59 +95,98 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		btnDatPhong = new JButton(" Đặt Phòng ");
 		btnPhong = new JButton("Phòng");
 		btnTaiKhoan = new JButton("Tài Khoản");
-		btnDichVu = new JButton("Dich Vụ");
 
-		btnBaoCao=new JButton("Báo cáo");
+		btnDichVu = new JButton("Dịch Vụ");
+		btnBaoCao=new JButton("Báo Cáo");
 
-
-		pnLeft.add(btnHome, BorderLayout.CENTER);
-		pnLeft.add(btnNhanVien, BorderLayout.CENTER);
-		pnLeft.add(btnDatPhong, BorderLayout.CENTER);
-		pnLeft.add(btnTaiKhoan, BorderLayout.CENTER);
-		pnLeft.add(btnDichVu, BorderLayout.CENTER);
-
-		pnLeft.add(btnBaoCao,BorderLayout.CENTER);
-
-
-		Box b = Box.createVerticalBox();
-		Box bHome = Box.createHorizontalBox();
-		bHome.add(btnHome);
-		b.add(bHome);
-		b.add(Box.createVerticalStrut(5));
-
-		Box bQLNhanVien = Box.createHorizontalBox();
-		bQLNhanVien.add(btnNhanVien);
-		b.add(bQLNhanVien);
-		b.add(Box.createVerticalStrut(5));
+		// set button styles
+		Font font = new Font("Arial", Font.PLAIN, 16);
+		Dimension size = new Dimension(150, 40);
 		
-		Box bQLPhong = Box.createHorizontalBox();
-		bQLPhong.add(btnPhong);
-		b.add(bQLPhong);
-		b.add(Box.createVerticalStrut(5));
+		Color fgColor = new Color(39, 60, 117);
 
-		Box bTaiKhoan = Box.createHorizontalBox();
-		bTaiKhoan.add(btnTaiKhoan);
-		b.add(bTaiKhoan);
-		b.add(Box.createVerticalStrut(5));
-		
-		Box bDichVu = Box.createHorizontalBox();
-		bDichVu.add(btnDichVu);
-		b.add(bDichVu);
-		b.add(Box.createVerticalStrut(5));
+		btnHome.setFont(font);
+		btnHome.setPreferredSize(size);
+		btnHome.setBackground(bgColor);
+		btnHome.setForeground(fgColor);
 
-		Box bDatPhong = Box.createHorizontalBox();
-		bDatPhong.add(btnDatPhong);
-		b.add(bDatPhong);
-		b.add(Box.createVerticalStrut(5));
+		btnNhanVien.setFont(font);
+		btnNhanVien.setPreferredSize(size);
+		btnNhanVien.setBackground(bgColor);
+		btnNhanVien.setForeground(fgColor);
 
-		
-		Box bBaoCao = Box.createHorizontalBox();
-		bBaoCao.add(btnBaoCao);
-		b.add(bBaoCao);
-		b.add(Box.createVerticalStrut(5));
+		btnDatPhong.setFont(font);
+		btnDatPhong.setPreferredSize(size);
+		btnDatPhong.setBackground(bgColor);
+		btnDatPhong.setForeground(fgColor);
+
+		btnPhong.setFont(font);
+		btnPhong.setPreferredSize(size);
+		btnPhong.setBackground(bgColor);
+		btnPhong.setForeground(fgColor);
+
+		btnTaiKhoan.setFont(font);
+		btnTaiKhoan.setPreferredSize(size);
+		btnTaiKhoan.setBackground(bgColor);
+		btnTaiKhoan.setForeground(fgColor);
+
+		btnDichVu.setFont(font);
+		btnDichVu.setPreferredSize(size);
+		btnDichVu.setBackground(bgColor);
+		btnDichVu.setForeground(fgColor);
+
+		btnBaoCao.setFont(font);
+		btnBaoCao.setPreferredSize(size);
+		btnBaoCao.setBackground(bgColor);
+		btnBaoCao.setForeground(fgColor);
+
+		// add icons to buttons
+		Icon homeIcon = new ImageIcon("img/home1.png");
+		Image homeImage=((ImageIcon) homeIcon).getImage();
+		Image newHomeImage=homeImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		Icon newHomeIcon=new ImageIcon(newHomeImage);
+		Icon nhanVienIcon = new ImageIcon("img/nhanvien.png");
+		Image nvImage=((ImageIcon) nhanVienIcon).getImage();
+		Image newNVImg=nvImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+		Icon newNVIcon=new ImageIcon(newNVImg);
+		Icon datPhongIcon = new ImageIcon("img/datphong.png");
+		Image dpimg=((ImageIcon) datPhongIcon).getImage();
+		Image newdpimg=dpimg.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+		Icon newdpicon=new ImageIcon(newdpimg);
+		Icon phongIcon = new ImageIcon("img/phong.png");
+		Image pimg=((ImageIcon) phongIcon).getImage();
+		Image newpimg=pimg.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+		Icon newpicon=new ImageIcon(newpimg);
+		Icon taiKhoanIcon = new ImageIcon("img/taikhoan.png");
+		Image tkimg=((ImageIcon) taiKhoanIcon).getImage();
+		Image newtkimg=tkimg.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+		Icon newtkicon=new ImageIcon(newtkimg);
+		Icon dichVuIcon = new ImageIcon("img/dichvu.png");
+		Image dvimg=((ImageIcon) dichVuIcon).getImage();
+		Image newdvimg=dvimg.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+		Icon newdvicon=new ImageIcon(newdvimg);
+		Icon baoCaoIcon = new ImageIcon("img/baocao.png");
+		Image bcimg=((ImageIcon) baoCaoIcon).getImage();
+		Image newbcimg=bcimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		Icon newbcicon=new ImageIcon(newbcimg);
+
+		btnHome.setIcon(newHomeIcon);
+		btnNhanVien.setIcon(newNVIcon);
+		btnDatPhong.setIcon(newdpicon);
+		btnPhong.setIcon(newpicon);
+		btnTaiKhoan.setIcon(newtkicon);
+		btnDichVu.setIcon(newdvicon);
+		btnBaoCao.setIcon(newbcicon);
+
+		pnLeft.add(btnHome);
+		pnLeft.add(btnPhong);
+		pnLeft.add(btnDatPhong);
+		pnLeft.add(btnNhanVien);
+		pnLeft.add(btnTaiKhoan);
+		pnLeft.add(btnDichVu);
+		pnLeft.add(btnBaoCao);
 
 
-		pnLeft.add(b, BorderLayout.NORTH);
 	}
 
 	private void taoPanelThongTinNhanVien() {
