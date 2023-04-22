@@ -233,20 +233,10 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 	}
 
 	public boolean validDate() {
-
-		String maNV = txtManv.getText().trim();
-
 		String hoTen = txtHoTen.getText().trim();
 		String sdt = txtSDT.getText().trim();
 		String tuoi = txtTuoi.getText().trim();
 		String luong = txtLuong.getText().trim();
-
-
-		if(maNV.equals("")) {
-			txtMess.setText("Mã NV không được rỗng!! hãy nhấn random mã"
-					+ "");
-			return false;
-		}
 
 		if (!hoTen.matches("^[A-Z][a-z]+((\s[A-Z][a-z]*)+)$")) {
 			txtMess.setText("Tên chỉ chứa các ký tự chữ cái có thể gồm nhiều từ ngăn cách bởi dấu khoảng trắng");
@@ -435,9 +425,6 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 					JOptionPane.showMessageDialog(this, "Trùng mã");
 				} else {
 					napDuLieuTuCSDL(nhanVien_bus.getAllNhanVien());
-
-					table.clearSelection();
-
 				}
 			}
 		}

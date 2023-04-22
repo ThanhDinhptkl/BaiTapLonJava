@@ -1,7 +1,5 @@
 package bus;
 
-import java.sql.Date;
-
 import java.util.ArrayList;
 
 import dao.Dao_HoaDon;
@@ -43,11 +41,6 @@ public class Bus_HoaDon implements I_HoaDon{
 	@Override
 	public boolean xoa(String idHD) {
 		return dao_hd.xoa(idHD);
-	}
-
-	@Override
-	public ArrayList<HoaDon> getHoaDonByDateRange(Date fromDate, Date toDate) {
-		return dao_hd.getHoaDonByDateRange(fromDate, toDate);
 	}
 
 }
