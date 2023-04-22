@@ -33,9 +33,7 @@ import entity.TaiKhoan;
 
 public class FrmManHinhChinh extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
-
 	private JButton btnHome, btnPhong, btnDichVu, btnDatPhong, btnDangXuat, btnDoiMK,btnNhanVien,btnBaoCao,selectedButton;
-
 	public static JButton btnTaiKhoan;
 	private JTextField txtMaNV, txtHoTenNV;
 	private Color bgColor = new Color(255, 255, 255);
@@ -48,6 +46,9 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 	private JPanel pnPhong;
 	private JPanel pnTaiKhoan;
 
+	private JPanel pnBaoCao;
+
+
 	private TaiKhoan TaiKhoanlogin;
 	private Bus_NhanVien nhanVien_bus = new Bus_NhanVien();
 	private Bus_TaiKhoan taiKhoan_bus = new Bus_TaiKhoan();
@@ -59,6 +60,9 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 	private FrmDatPhong frmDatPhong = new FrmDatPhong();
 	private FrmPhong frmPhong = new FrmPhong();
 	private FrmDichVu frmDichVu = new FrmDichVu();
+
+	private FrmBaoCao frmBaoCao=new FrmBaoCao();
+
 	
 
 	public FrmManHinhChinh(TaiKhoan taiKhoan) {
@@ -96,22 +100,8 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		btnDatPhong = new JButton("Đặt Phòng");
 		btnNhanVien = new JButton("Nhân Viên");
 		btnTaiKhoan = new JButton("Tài Khoản");
-
 		btnDichVu = new JButton("Dịch Vụ");
 		btnBaoCao=new JButton("Báo Cáo");
-
-		pnLeft.add(btnHome, BorderLayout.CENTER);
-		pnLeft.add(btnNhanVien, BorderLayout.CENTER);
-		pnLeft.add(btnDatPhong, BorderLayout.CENTER);
-		pnLeft.add(btnTaiKhoan, BorderLayout.CENTER);
-		pnLeft.add(btnDichVu, BorderLayout.CENTER);
-
-		Box b = Box.createVerticalBox();
-		Box bHome = Box.createHorizontalBox();
-		bHome.add(btnHome);
-		b.add(bHome);
-		b.add(Box.createVerticalStrut(5));
-
 
 		// set button styles
 		Font font = new Font("Arial", Font.PLAIN, 16);
@@ -209,14 +199,6 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		btnBaoCao.setBounds(25,320,150,40);
 		pnLeft.setPreferredSize(new Dimension(200,700));
 
-
-		Box bDatPhong = Box.createHorizontalBox();
-		bDatPhong.add(btnDatPhong);
-		b.add(bDatPhong);
-		b.add(Box.createVerticalStrut(5));
-
-		pnLeft.add(b, BorderLayout.NORTH);
-
 	}
 
 	private void taoPanelThongTinNhanVien() {
@@ -292,6 +274,11 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		pnDichVu = new JPanel();
 		pnDichVu.add(frmDichVu.contentPane);
 
+		
+		pnBaoCao=new JPanel();
+		pnBaoCao.add(frmBaoCao.contentPane);
+
+
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new CardLayout());
 		mainPanel.add(pnHome, "Panel Home");
@@ -300,6 +287,9 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		mainPanel.add(pnDatPhong, "Panel DatPhong");
 		mainPanel.add(pnPhong, "Panel Phong");
 		mainPanel.add(pnDichVu, "Panel DichVu");
+
+		mainPanel.add(pnBaoCao,"Panel BaoCao");
+
 
 
 		pnBorder.add(mainPanel, BorderLayout.CENTER);
@@ -379,7 +369,6 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 				selectedButton.setBackground(Color.green);
 			}
 		});
-
 
 		
 		btnBaoCao.addMouseListener(new MouseAdapter() {

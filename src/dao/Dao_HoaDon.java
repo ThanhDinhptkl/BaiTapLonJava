@@ -12,6 +12,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+
+import org.apache.poi.ss.formula.functions.Today;
+
+
 import connectDB.ConnectDB;
 import entity.HoaDon;
 import entity.KhachHang;
@@ -227,6 +231,40 @@ public class Dao_HoaDon implements I_HoaDon {
 			}
 		}
 		return n > 0;
+	}
+
+	@Override
+	public ArrayList<HoaDon> getHoaDonByDateRange(Date fromDate, Date toDate) {
+		ArrayList<HoaDon> dsHD=new ArrayList<HoaDon>();
+		PreparedStatement sta = null;
+		try {
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			String sql = "Select * from HoaDon where MAKH = ?";
+			sta = con.prepareStatement(sql);
+			sta.setDate(1, new java.sql.Date(fromDate.getTime()));
+			sta.setDate(2, new java.sql.Date(toDate.getTime()));
+
+			ResultSet rs = sta.executeQuery();
+			while (rs.next()) {
+				String maHD = rs.getString("MAHD");
+				NhanVien nv = new NhanVien(rs.getString("MANV"));
+				KhachHang kh = new KhachHang(rs.getString("MAKH"));
+				Date date = rs.getDate("NGAYLAPHD");
+				LocalDate ngayLapHD = date.toLocalDate();
+				HoaDon hd = new HoaDon(maHD, nv, kh, ngayLapHD);
+				dsHD.add(hd);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				sta.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return dsHD;
 	}
 
 }

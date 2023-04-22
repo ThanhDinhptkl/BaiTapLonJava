@@ -189,14 +189,11 @@ public class FrmPhong extends JFrame implements ActionListener{
 			setVisible(false);
 			new FrmDatPhong().setVisible(true);
 		}else if(o.equals(itTraPhong)) {
-			setVisible(false);
-			new FrmTraPhong().setVisible(true);
+			
 		}else if(o.equals(itDoiPhong)) {
 			
 		}else if(o.equals(itXemThongTinKhach)) {
-
 			//new FrmKhachHang().setVisible(true);
-
 
 		}else if(o.equals(itCapNhatDichVu)) {
 			
