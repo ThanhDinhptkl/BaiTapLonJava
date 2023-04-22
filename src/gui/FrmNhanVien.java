@@ -187,6 +187,7 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 		pnChucNang.add(btnXoaTrang);
 		pnChucNang.add(btnSua);
 		split.add(pnChucNang);
+		pnBorder.setPreferredSize(new Dimension(900,600));
 
 		napDuLieuTuCSDL(nhanVien_bus.getAllNhanVien());
 

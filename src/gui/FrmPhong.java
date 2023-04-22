@@ -60,7 +60,7 @@ public class FrmPhong extends JFrame implements ActionListener{
 		// Tạo panel chứa danh sách phòng
         JPanel roomListPanel = new JPanel(new GridLayout(6, 5,10,10));
         roomListPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        roomListPanel.setPreferredSize(new Dimension(900, 600));
+        roomListPanel.setPreferredSize(new Dimension(900, 550));
 
         // Tạo các phòng và chèn vào panel
         for (int i = 1; i <= NUM_ROOMS; i++) {
@@ -194,7 +194,10 @@ public class FrmPhong extends JFrame implements ActionListener{
 		}else if(o.equals(itDoiPhong)) {
 			
 		}else if(o.equals(itXemThongTinKhach)) {
-			
+
+			//new FrmKhachHang().setVisible(true);
+
+
 		}else if(o.equals(itCapNhatDichVu)) {
 			
 		}else if(o.equals(itDonPhong)) {

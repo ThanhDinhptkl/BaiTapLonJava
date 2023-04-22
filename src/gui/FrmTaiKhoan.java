@@ -90,7 +90,7 @@ public class FrmTaiKhoan extends JFrame implements ActionListener, MouseListener
 		table = new JTable(model);
 		JScrollPane js = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		js.setPreferredSize(new Dimension(750, 540));
+		js.setPreferredSize(new Dimension(600, 450));
 		js.setBorder(BorderFactory.createEtchedBorder());
 		pnBorder.add(js, BorderLayout.WEST);
 
@@ -160,6 +160,8 @@ public class FrmTaiKhoan extends JFrame implements ActionListener, MouseListener
 		btnTim = new JButton("Tìm Mã NV");
 		b5.add(txtTim);
 		b5.add(btnTim);
+		
+		pnBorder.setPreferredSize(new Dimension(900,600));
 
 		contentPane = new JPanel();
 		contentPane.add(pnBorder);
