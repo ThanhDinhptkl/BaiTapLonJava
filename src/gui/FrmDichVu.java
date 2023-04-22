@@ -2,11 +2,8 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Image;
 
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -86,21 +83,8 @@ public class FrmDichVu extends JFrame{
 		pnSouth.add(txtTienKhachDua=new JTextField(10));
 		pnSouth.add(lblTienTraLai=new JLabel("Tiền trả lại:"));
 		pnSouth.add(txtTienTraLai=new JTextField(10));
-		
-		Icon iconLuu = new ImageIcon("img/save.png");
-		Image imgLuu = ((ImageIcon)iconLuu).getImage();
-		Image newImgLuu = imgLuu.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
-		Icon newIconLuu = new ImageIcon(newImgLuu);
-		pnSouth.add(btnThoat=new JButton("Thoát"));
 		pnSouth.add(btnLuu=new JButton("Lưu"));
-		btnLuu.setIcon(newIconLuu);
-		
-		Icon iconThoat = new ImageIcon("img/exit.png");
-		Image imgThoat = ((ImageIcon)iconThoat).getImage();
-		Image newImgThoat = imgThoat.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
-		Icon newIconThoat = new ImageIcon(newImgThoat);
 		pnSouth.add(btnThoat=new JButton("Thoát"));
-		btnThoat.setIcon(newIconThoat);
 		pnSouth.setBorder(BorderFactory.createTitledBorder("South"));
 		
 		lblPhongMua.setBounds(10,10,100,30);

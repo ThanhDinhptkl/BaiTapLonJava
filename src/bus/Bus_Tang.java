@@ -34,9 +34,4 @@ public class Bus_Tang implements I_Tang {
 		return dao_tang.xoa(id);
 	}
 
-	@Override
-	public ArrayList<Tang> getTangTheoTenTang(String tenTang) {
-		return dao_tang.getTangTheoTenTang(tenTang);
-	}
-
 }

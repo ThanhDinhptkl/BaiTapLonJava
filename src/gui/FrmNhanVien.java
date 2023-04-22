@@ -10,10 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -235,20 +232,10 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 	}
 
 	public boolean validDate() {
-
-		String maNV = txtManv.getText().trim();
-
 		String hoTen = txtHoTen.getText().trim();
 		String sdt = txtSDT.getText().trim();
 		String tuoi = txtTuoi.getText().trim();
 		String luong = txtLuong.getText().trim();
-
-
-		if(maNV.equals("")) {
-			txtMess.setText("Mã NV không được rỗng!! hãy nhấn random mã"
-					+ "");
-			return false;
-		}
 
 		if (!hoTen.matches("^[A-Z][a-z]+((\s[A-Z][a-z]*)+)$")) {
 			txtMess.setText("Tên chỉ chứa các ký tự chữ cái có thể gồm nhiều từ ngăn cách bởi dấu khoảng trắng");
@@ -377,17 +364,7 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 			radNu.setSelected(true);
 		}
 		txtTuoi.setText(table.getValueAt(r, 4).toString());
-		String stringNumber = table.getValueAt(r, 5).toString();
-		stringNumber = stringNumber.replace(",", "");
-
-		float floatValue = 0.0f;
-		try {
-		    NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
-		    floatValue = format.parse(stringNumber).floatValue();
-		} catch (ParseException e) {
-		    e.printStackTrace();
-		}
-		txtLuong.setText(floatValue+"");
+		txtLuong.setText(table.getValueAt(r, 5).toString());
 	}
 
 	public void timTheoMaNV() {
@@ -447,9 +424,6 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 					JOptionPane.showMessageDialog(this, "Trùng mã");
 				} else {
 					napDuLieuTuCSDL(nhanVien_bus.getAllNhanVien());
-
-					table.clearSelection();
-
 				}
 			}
 		}

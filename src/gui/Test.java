@@ -24,7 +24,7 @@ import entity.ThietBi;
 public class Test {
 
 	public static void main(String[] args) {
-		Bus_Tang btang = new Bus_Tang();
+//		Bus_Tang btang = new Bus_Tang();
 		Tang t1 = new Tang(1, "Tầng 1");
 		Tang t2 = new Tang(2, "Tầng 2");
 		Tang t3 = new Tang(3, "Tầng 3");
@@ -35,14 +35,7 @@ public class Test {
 //		btang.them(t3);
 //		btang.them(t4);
 //		btang.them(t5);
-//		int n = btang.getAllTang().size();
-//		String items[] = new String[n];
-//		int i = 0;
 //		System.out.println(btang.getAllTang());
-//		for (Tang t : btang.getAllTang()) {
-//			System.out.println(t.getTenTang());
-//		}
-//		System.out.println(items[1]);
 //		System.out.println(btang.getTangTheoMaTang(2));;
 //		System.out.println(btang.capNhat(t5));
 //		System.out.println(btang.xoa(3));

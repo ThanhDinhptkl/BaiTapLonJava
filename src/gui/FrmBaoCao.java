@@ -86,22 +86,9 @@ public class FrmBaoCao extends JFrame implements ActionListener{
 		cbLoc.addItem("Tháng qua");
 		cbLoc.addItem("Quý qua");
 		pnNorth.add(btnLoc=new JButton("Lọc"));
-		
-		Icon iconBieuDo = new ImageIcon("img/schema_preport.png");
-		Image imgBieuDo = ((ImageIcon)iconBieuDo).getImage();
-		Image newImgBieuDo = imgBieuDo.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
-		Icon newIconBieuDO = new ImageIcon(newImgBieuDo);
 		pnNorth.add(btnHienThiBieuDo=new JButton("Hiển thị dưới dạng biểu đồ"));
-		btnHienThiBieuDo.setIcon(newIconBieuDO);
-		
-		Icon iconXuatBaoCao = new ImageIcon("img/wrapper_report.png");
-		Image imgXuatBaoCao = ((ImageIcon)iconXuatBaoCao).getImage();
-		Image newImgXuatBaoCao = imgXuatBaoCao.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
-		Icon newIconXuatBaoCao = new ImageIcon(newImgXuatBaoCao);
 		pnNorth.add(btnXuatBaoCao=new JButton("Xuất báo cáo"));
-		btnXuatBaoCao.setIcon(newIconXuatBaoCao);
-		
-		Icon iconThoat = new ImageIcon("img/exit.png");
+		Icon iconThoat = new ImageIcon("img/traphong.jpg");
 		Image imgThoat = ((ImageIcon)iconThoat).getImage();
 		Image newImgThoat = imgThoat.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
 		Icon newIconThoat = new ImageIcon(newImgThoat);
@@ -117,9 +104,9 @@ public class FrmBaoCao extends JFrame implements ActionListener{
 		cbLoc.setBounds(100, 120, 150, 30);
 		btnLoc.setBounds(270,70,60,30);
 		chkDichVu.setBounds(270,5,150,60);
-		btnHienThiBieuDo.setBounds(440, 20, 200, 30);
-		btnXuatBaoCao.setBounds(630, 20, 150, 30);
-		btnThoat.setBounds(780, 20, 120, 30);
+		btnHienThiBieuDo.setBounds(450, 20, 150, 30);
+		btnXuatBaoCao.setBounds(620, 20, 120, 30);
+		btnThoat.setBounds(760, 20, 120, 30);
 		pnNorth.setPreferredSize(new Dimension(900,170)); 
 
         String[] columnNames = {"Mã HD","Mã Phòng","Tên khách hàng","Ngày đặt","Ngày trả","Số người","Giá phòng","Ngày lập hóa đơn","Số lượng dịch vụ","Tên dịch vụ","Giá dịch vụ","Tổng tiền dịch vụ","Tổng tiền thanh toán"};
@@ -439,7 +426,6 @@ public class FrmBaoCao extends JFrame implements ActionListener{
 					"JOIN DichVu AS dv ON ct.MADV=dv.MADV";
 			Statement sta = con.createStatement();
 			DefaultTableModel dm=(DefaultTableModel) table.getModel();
-			dm.getDataVector().removeAllElements();
 			ResultSet rs = sta.executeQuery(sql);
 			Object obj[]=new Object[15];
 			while (rs.next()) {
@@ -456,8 +442,7 @@ public class FrmBaoCao extends JFrame implements ActionListener{
 				obj[10]=rs.getDouble(11);
 				obj[11]=rs.getDouble(9) * rs.getDouble(11); // tính tổng tiền dịch vụ
 		        obj[12]=rs.getDouble(7) + rs.getDouble(11) * rs.getDouble(9); // tính tổng tiền bao gồm phòng và dịch vụ
-//				dm.addRow(obj);
-		        model.addRow(obj);
+				dm.addRow(obj);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

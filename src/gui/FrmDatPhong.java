@@ -58,7 +58,8 @@ public class FrmDatPhong extends JFrame implements WindowListener{
 		pnNorth.setPreferredSize(new Dimension(900, 220));
 
 		// Thêm JPanel chứa thông tin khách hàng bên trái
-		JPanel pnCustomer = new JPanel(new GridLayout(7,2,5,5));
+		JPanel pnCustomer = new JPanel(new GridLayout(7,2, 5,5));
+		
 		pnCustomer.setBorder(BorderFactory.createTitledBorder("Thông tin khách hàng"));
 		pnCustomer.add(lblMaPH=new JLabel("Mã khách hàng:"));
 		pnCustomer.add(txtMaPH=new JTextField());

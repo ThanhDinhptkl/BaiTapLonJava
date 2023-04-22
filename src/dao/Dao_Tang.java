@@ -147,35 +147,4 @@ public class Dao_Tang implements I_Tang {
 		return n > 0;
 	}
 
-	@Override
-	public ArrayList<Tang> getTangTheoTenTang(String tenTang) {
-		ArrayList<Tang> dsTang = new ArrayList<Tang>();
-		PreparedStatement sta = null;
-		try {
-			ConnectDB.getInstance();
-			Connection con = ConnectDB.getConnection();
-			String sql = "Select * from Tang where TENTANG = ?";
-			sta = con.prepareStatement(sql);
-			sta.setString(1, tenTang);
-
-			ResultSet rs = sta.executeQuery();
-			while (rs.next()) {
-				int maTang = rs.getInt("MATANG");
-				String tentang = rs.getString("TENTANG");
-
-				Tang t = new Tang(maTang, tenTang);
-				dsTang.add(t);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				sta.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return dsTang;
-	}
-
 }

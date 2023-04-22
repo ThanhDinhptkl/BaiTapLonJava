@@ -83,24 +83,6 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
 		btnSua.addActionListener(this);
 		btnTim.addActionListener(this);
 	}
-	public FrmKhachHang(String ma) {
-		setTitle("Thông tin khách hàng");
-		setSize(1050, 700);
-		setLocationRelativeTo(null);
-		setResizable(false);
-
-		createGUI();
-		timKHDangThuePhong(ma);
-		
-		btnXoaTrang.addActionListener(this);
-		table.addMouseListener(this);
-		btnRanDom.addActionListener(this);
-		btnThem.addActionListener(this);
-		btnXoa.addActionListener(this);
-		btnReset.addActionListener(this);
-		btnSua.addActionListener(this);
-		btnTim.addActionListener(this);
-	}
 
 	public void createGUI() {
 		JPanel pnBorder = new JPanel();
@@ -405,19 +387,6 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
 			model.addRow(new Object[] { kh.getMaKH(), kh.getHoTen(), kh.getsDT(), kh.getCccd(), kh.getEmail(),
 					kh.isPhai() ? "Nam" : "Nữ", kh.getDiaChi() });
 			table.clearSelection();
-		} else {
-			JOptionPane.showMessageDialog(this, "Không tìm thấy!");
-		}
-		xoaTrang();
-	}
-	
-	public void timKHDangThuePhong(String ma) {
-		KhachHang kh = khachHang_bus.getKhachHangTheoMaKH(ma);
-		if (kh != null) {
-			DefaultTableModel dm = (DefaultTableModel) table.getModel();
-			dm.getDataVector().removeAllElements();
-			model.addRow(new Object[] { kh.getMaKH(), kh.getHoTen(), kh.getsDT(), kh.getCccd(), kh.getEmail(),
-					kh.isPhai() ? "Nam" : "Nữ", kh.getDiaChi() });
 		} else {
 			JOptionPane.showMessageDialog(this, "Không tìm thấy!");
 		}
