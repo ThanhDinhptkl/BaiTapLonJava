@@ -6,18 +6,13 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.ButtonGroup;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,11 +28,12 @@ import entity.TaiKhoan;
 
 public class FrmManHinhChinh extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
+
 	private JButton btnHome, btnPhong, btnDichVu, btnDatPhong, btnDangXuat, btnDoiMK,btnNhanVien,btnBaoCao,selectedButton;
+
 	public static JButton btnTaiKhoan;
 	private JTextField txtMaNV, txtHoTenNV;
-	private Color bgColor = new Color(255, 255, 255);
-	
+
 	private JPanel pnLeft;
 	private JPanel pnBorder;
 	private JPanel pnHome;
@@ -58,7 +54,7 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 	private FrmNhanVien frmNhanVien = new FrmNhanVien();
 	private FrmTaiKhoan frmTaiKhoan = new FrmTaiKhoan();
 	private FrmDatPhong frmDatPhong = new FrmDatPhong();
-	private FrmPhong frmPhong = new FrmPhong();
+	private FrmQLPhong frmQLPhong = new FrmQLPhong();
 	private FrmDichVu frmDichVu = new FrmDichVu();
 
 	private FrmBaoCao frmBaoCao=new FrmBaoCao();
@@ -85,21 +81,21 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 	}
 
 	public void taoMenuTrai() {
-		
 		pnBorder = new JPanel();
 		add(pnBorder, BorderLayout.CENTER);
 		pnBorder.setLayout(new BorderLayout());
 
 		pnLeft = new JPanel();
-		pnLeft.setLayout(null);
+		pnLeft.setLayout(new BorderLayout());
 		pnBorder.add(pnLeft, BorderLayout.WEST);
 		pnLeft.setBackground(new Color(39, 60, 117));
 
-		btnHome = new JButton("Home");
-		btnPhong = new JButton("Sơ đồ phòng");
-		btnDatPhong = new JButton("Đặt Phòng");
-		btnNhanVien = new JButton("Nhân Viên");
+		btnHome = new JButton("     Home     ");
+		btnNhanVien = new JButton("QL Nhân Viên");
+		btnDatPhong = new JButton(" Đặt Phòng ");
+		btnPhong = new JButton("Phòng");
 		btnTaiKhoan = new JButton("Tài Khoản");
+
 		btnDichVu = new JButton("Dịch Vụ");
 		btnBaoCao=new JButton("Báo Cáo");
 
@@ -189,21 +185,13 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		pnLeft.add(btnTaiKhoan);
 		pnLeft.add(btnDichVu);
 		pnLeft.add(btnBaoCao);
-		
-		btnHome.setBounds(25,20,150,40);
-		btnPhong.setBounds(25,70,150,40);
-		btnDatPhong.setBounds(25,120,150,40);
-		btnNhanVien.setBounds(25,170,150,40);
-		btnTaiKhoan.setBounds(25,220,150,40);
-		btnDichVu.setBounds(25,270,150,40);
-		btnBaoCao.setBounds(25,320,150,40);
-		pnLeft.setPreferredSize(new Dimension(200,700));
+
 
 	}
 
 	private void taoPanelThongTinNhanVien() {
 		Box bNhanVien = Box.createVerticalBox();
-		pnLeft.add(bNhanVien);
+		pnLeft.add(bNhanVien, BorderLayout.SOUTH);
 
 		Box bTitle = Box.createHorizontalBox();
 		bNhanVien.add(bTitle);
@@ -251,12 +239,11 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		bNhanVien.add(bDangXuat);
 		bDangXuat.add(btnDangXuat);
 		bDangXuat.add(btnDoiMK);
-		bNhanVien.setBounds(10,550,180,100);
 	}
 
 	public void taoPanelMain() {
 		pnHome = new JPanel();
-		JLabel lblHome = new JLabel(new ImageIcon("img/home3.png"));
+		JLabel lblHome = new JLabel(new ImageIcon("img/home.png"));
 		pnHome.add(lblHome);
 
 		pnQLNhanVien = new JPanel();
@@ -269,7 +256,7 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		pnDatPhong.add(frmDatPhong.contentPane);
 		
 		pnPhong = new JPanel();
-		pnPhong.add(frmPhong.contentPane);
+		pnPhong.add(frmQLPhong.contentPane);
 		
 		pnDichVu = new JPanel();
 		pnDichVu.add(frmDichVu.contentPane);
@@ -296,16 +283,10 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 	}
 
 	public void taoSuKienChoButtonMenuTrai() {
-		
 		btnHome.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				CardLayout c = (CardLayout) (pnHome.getParent().getLayout());
 				c.show(pnHome.getParent(), "Panel Home");
-				if(selectedButton!=null) {
-					selectedButton.setBackground(bgColor);
-				}
-				selectedButton=btnHome;
-				selectedButton.setBackground(Color.green);
 			}
 		});
 
@@ -313,11 +294,6 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 			public void mousePressed(MouseEvent e) {
 				CardLayout c = (CardLayout) (pnQLNhanVien.getParent().getLayout());
 				c.show(pnQLNhanVien.getParent(), "pnQL NhanVien");
-				if(selectedButton!=null) {
-					selectedButton.setBackground(bgColor);
-				}
-				selectedButton=btnNhanVien;
-				selectedButton.setBackground(Color.green);
 			}
 		});
 
@@ -326,11 +302,6 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 			public void mousePressed(MouseEvent e) {
 				CardLayout c = (CardLayout) (pnDatPhong.getParent().getLayout());
 				c.show(pnDatPhong.getParent(), "Panel DatPhong");
-				if(selectedButton!=null) {
-					selectedButton.setBackground(bgColor);
-				}
-				selectedButton=btnDatPhong;
-				selectedButton.setBackground(Color.green);
 			}
 		});
 		
@@ -338,11 +309,6 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 			public void mousePressed(MouseEvent e) {
 				CardLayout c = (CardLayout) (pnPhong.getParent().getLayout());
 				c.show(pnPhong.getParent(), "Panel Phong");
-				if(selectedButton!=null) {
-					selectedButton.setBackground(bgColor);
-				}
-				selectedButton=btnPhong;
-				selectedButton.setBackground(Color.green);
 			}
 		});
 		
@@ -350,11 +316,6 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 			public void mousePressed(MouseEvent e) {
 				CardLayout c = (CardLayout) (pnDichVu.getParent().getLayout());
 				c.show(pnDichVu.getParent(), "Panel DichVu");
-				if(selectedButton!=null) {
-					selectedButton.setBackground(bgColor);
-				}
-				selectedButton=btnDichVu;
-				selectedButton.setBackground(Color.green);
 			}
 		});
 		
@@ -362,11 +323,6 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 			public void mousePressed(MouseEvent e) {
 				CardLayout c = (CardLayout) (pnTaiKhoan.getParent().getLayout());
 				c.show(pnTaiKhoan.getParent(), "Panel TaiKhoan");
-				if(selectedButton!=null) {
-					selectedButton.setBackground(bgColor);
-				}
-				selectedButton=btnTaiKhoan;
-				selectedButton.setBackground(Color.green);
 			}
 		});
 
@@ -375,11 +331,6 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 			public void mousePressed(MouseEvent e) {
 				CardLayout c = (CardLayout) (pnBaoCao.getParent().getLayout());
 				c.show(pnBaoCao.getParent(), "Panel BaoCao");
-				if(selectedButton!=null) {
-					selectedButton.setBackground(bgColor);
-				}
-				selectedButton=btnBaoCao;
-				selectedButton.setBackground(Color.green);
 			}
 		});
 

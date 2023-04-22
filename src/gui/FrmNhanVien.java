@@ -10,7 +10,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -187,7 +190,6 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 		pnChucNang.add(btnXoaTrang);
 		pnChucNang.add(btnSua);
 		split.add(pnChucNang);
-		pnBorder.setPreferredSize(new Dimension(900,600));
 
 		napDuLieuTuCSDL(nhanVien_bus.getAllNhanVien());
 
@@ -375,7 +377,17 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 			radNu.setSelected(true);
 		}
 		txtTuoi.setText(table.getValueAt(r, 4).toString());
-		txtLuong.setText(table.getValueAt(r, 5).toString());
+		String stringNumber = table.getValueAt(r, 5).toString();
+		stringNumber = stringNumber.replace(",", "");
+
+		float floatValue = 0.0f;
+		try {
+		    NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
+		    floatValue = format.parse(stringNumber).floatValue();
+		} catch (ParseException e) {
+		    e.printStackTrace();
+		}
+		txtLuong.setText(floatValue+"");
 	}
 
 	public void timTheoMaNV() {
