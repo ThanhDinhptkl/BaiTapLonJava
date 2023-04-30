@@ -100,12 +100,13 @@ public class FrmQLPhong extends JFrame implements ActionListener, MouseListener 
 	public void createGUI() {
 		JPanel pnBorder = new JPanel();
 		pnBorder.setLayout(new BorderLayout());
+		pnBorder.setPreferredSize(new Dimension(900, 600));
 		add(pnBorder);
 
 		JPanel pnNorth = new JPanel();
 		JLabel lblTieuDe = new JLabel("THÔNG TIN PHÒNG");
 		lblTieuDe.setForeground(Color.blue);
-		Font fTieuDe = new Font("Arial", Font.BOLD, 35);
+		Font fTieuDe = new Font("Arial", Font.BOLD, 25);
 		lblTieuDe.setFont(fTieuDe);
 		pnNorth.add(lblTieuDe);
 		pnBorder.add(pnNorth, BorderLayout.NORTH);
@@ -239,10 +240,9 @@ public class FrmQLPhong extends JFrame implements ActionListener, MouseListener 
 		itDatPhong.addActionListener(this);
 		itTraPhong.addActionListener(this);
 		itDoiPhong.addActionListener(this);
-		itDonPhong.addActionListener(this);
 		itCapNhatDichVu.addActionListener(this);
 		itXemThongTinKhach.addActionListener(this);
-		itSuaPhong.addActionListener(this);
+
 
 	}
 
@@ -299,25 +299,15 @@ public class FrmQLPhong extends JFrame implements ActionListener, MouseListener 
 		itXemThongTinKhach.setIcon(iconXem);
 		itCapNhatDichVu = new JMenuItem("Cập nhật dịch vụ");
 		ImageIcon iconDichVu = new ImageIcon("img/dichvu.png");
-		itCapNhatDichVu.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.black));
 		iconDichVu.setImage(iconDichVu.getImage().getScaledInstance(20, 15, Image.SCALE_SMOOTH));
 		itCapNhatDichVu.setIcon(iconDichVu);
-		itDonPhong = new JMenuItem("Dọn phòng");
-		ImageIcon iconDonPhong = new ImageIcon("img/don.jpg");
-		iconDonPhong.setImage(iconDonPhong.getImage().getScaledInstance(20, 15, Image.SCALE_SMOOTH));
-		itDonPhong.setIcon(iconDonPhong);
-		itSuaPhong = new JMenuItem("Sửa phòng");
-		ImageIcon iconSuaPhong = new ImageIcon("img/suachua.jpg");
-		iconSuaPhong.setImage(iconSuaPhong.getImage().getScaledInstance(20, 15, Image.SCALE_SMOOTH));
-		itSuaPhong.setIcon(iconSuaPhong);
+
 
 		popupMenu.add(itDatPhong);
 		popupMenu.add(itTraPhong);
 		popupMenu.add(itDoiPhong);
 		popupMenu.add(itXemThongTinKhach);
 		popupMenu.add(itCapNhatDichVu);
-		popupMenu.add(itDonPhong);
-		popupMenu.add(itSuaPhong);
 
 	}
 
@@ -516,10 +506,10 @@ public class FrmQLPhong extends JFrame implements ActionListener, MouseListener 
 			new FrmDatPhong().setVisible(true);
 		}
 		if (o.equals(itTraPhong)) {
-
+			new FrmTraPhong().setVisible(true);
 		}
 		if (o.equals(itDoiPhong)) {
-
+			new FrmDoiPhong().setVisible(true);
 		}
 		if (o.equals(itXemThongTinKhach)) {
 			String maKH = "";
@@ -548,16 +538,6 @@ public class FrmQLPhong extends JFrame implements ActionListener, MouseListener 
 			}
 			
 		}
-		if (o.equals(itCapNhatDichVu)) {
-
-		}
-		if (o.equals(itDonPhong)) {
-
-		}
-		if (o.equals(itSuaPhong)) {
-
-		}
-
 	}
 
 }

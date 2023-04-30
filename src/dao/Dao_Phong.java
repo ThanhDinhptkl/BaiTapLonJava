@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import bus.Bus_Tang;
 import connectDB.ConnectDB;
 import entity.Phong;
 import entity.Tang;

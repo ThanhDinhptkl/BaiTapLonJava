@@ -74,6 +74,7 @@ public class FrmTaiKhoan extends JFrame implements ActionListener, MouseListener
 	public void createGUI() {
 		JPanel pnBorder = new JPanel();
 		pnBorder.setLayout(new BorderLayout());
+		pnBorder.setPreferredSize(new Dimension(900, 600));
 		add(pnBorder);
 
 		JPanel pnNorth = new JPanel();
@@ -81,7 +82,7 @@ public class FrmTaiKhoan extends JFrame implements ActionListener, MouseListener
 
 		JLabel lblTieuDe = new JLabel("THÔNG TIN TÀI KHOẢN");
 		lblTieuDe.setForeground(Color.blue);
-		Font fTieuDe = new Font("Arial", Font.BOLD, 45);
+		Font fTieuDe = new Font("Arial", Font.BOLD, 25);
 		lblTieuDe.setFont(fTieuDe);
 		pnNorth.add(lblTieuDe);
 
@@ -160,8 +161,6 @@ public class FrmTaiKhoan extends JFrame implements ActionListener, MouseListener
 		btnTim = new JButton("Tìm Mã NV");
 		b5.add(txtTim);
 		b5.add(btnTim);
-		
-		pnBorder.setPreferredSize(new Dimension(900,600));
 
 		contentPane = new JPanel();
 		contentPane.add(pnBorder);

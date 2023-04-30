@@ -27,7 +27,7 @@ public class FrmDoiPhong extends JFrame implements ActionListener {
 			lblChiTietLyDo;
 	private JTextField txtHoTen, txtCCCD, txtDiaChi, txtSDT, txtMaPhongCu, txtMaPhongMoi, txtChiTietLyDo, txtThongBao;
 	private JButton btnDoi, btnHuy;
-	private JComboBox comBoLyDoDoi;
+	private JComboBox comBoLyDoDoi, comBoMaPhongCu, comBoMaPhongMoi;
 	private JTable table;
 	private DefaultTableModel model;
 	private TableColumn demoColumn;
@@ -45,10 +45,10 @@ public class FrmDoiPhong extends JFrame implements ActionListener {
 	public void createGui() {
 		// Phần North
 		JPanel lbl_title = new JPanel();
-		lbl_title.add(lblTieuDe = new JLabel("Quản Lý Đổi Phòng Khách Sạn"));
+		lbl_title.add(lblTieuDe = new JLabel("ĐỔI PHÒNG"));
 		this.add(lbl_title, BorderLayout.NORTH);
-		lblTieuDe.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 25));
-		lblTieuDe.setForeground(Color.RED);
+		lblTieuDe.setFont(new Font("Arial", Font.BOLD, 25));
+		lblTieuDe.setForeground(Color.blue);
 
 		// Phần Center
 		JPanel pnCenter = new JPanel();
@@ -86,9 +86,19 @@ public class FrmDoiPhong extends JFrame implements ActionListener {
 		b2.add(txtSDT = new JTextField());
 
 		b3.add(lblMaPhongCu = new JLabel("Mã Phòng Cũ "));
-		b3.add(txtMaPhongCu = new JTextField());
+		b3.add(comBoMaPhongCu = new JComboBox());
+		comBoMaPhongCu.addItem("100");
+		comBoMaPhongCu.addItem("101");
+		comBoMaPhongCu.addItem("200");
+		comBoMaPhongCu.addItem("300");
+		comBoMaPhongCu.addItem("301");
 		b3.add(lblMaPhongMoi = new JLabel("Mã Phòng Mới "));
-		b3.add(txtMaPhongMoi = new JTextField());
+		b3.add(comBoMaPhongMoi = new JComboBox());
+		comBoMaPhongMoi.addItem("100");
+		comBoMaPhongMoi.addItem("101");
+		comBoMaPhongMoi.addItem("200");
+		comBoMaPhongMoi.addItem("300");
+		comBoMaPhongMoi.addItem("301");
 
 		b4.add(lblLyDoDoi = new JLabel("Lý Do Đổi "));
 		b4.add(comBoLyDoDoi = new JComboBox());
@@ -169,6 +179,28 @@ public class FrmDoiPhong extends JFrame implements ActionListener {
 				txtCCCD.setText((String) model.getValueAt(row, 1));
 				txtDiaChi.setText((String) model.getValueAt(row, 2));
 				txtSDT.setText((String) model.getValueAt(row, 4));
+				if (model.getValueAt(row, 3).equals("100")) {
+					comBoMaPhongCu.setSelectedItem("100");
+				} else if (model.getValueAt(row, 3).equals("101")) {
+					comBoMaPhongCu.setSelectedItem("101");
+				} else if (model.getValueAt(row, 3).equals("200")) {
+					comBoMaPhongCu.setSelectedItem("200");
+				} else if (model.getValueAt(row, 3).equals("300")) {
+					comBoMaPhongCu.setSelectedItem("300");
+				} else if (model.getValueAt(row, 3).equals("301")) {
+					comBoMaPhongCu.setSelectedItem("301");
+				}
+				if (model.getValueAt(row, 3).equals("100")) {
+					comBoMaPhongMoi.setSelectedItem("100");
+				} else if (model.getValueAt(row, 3).equals("101")) {
+					comBoMaPhongMoi.setSelectedItem("101");
+				} else if (model.getValueAt(row, 3).equals("200")) {
+					comBoMaPhongMoi.setSelectedItem("200");
+				} else if (model.getValueAt(row, 3).equals("300")) {
+					comBoMaPhongMoi.setSelectedItem("300");
+				} else if (model.getValueAt(row, 3).equals("301")) {
+					comBoMaPhongMoi.setSelectedItem("301");
+				}
 				if (model.getValueAt(row, 3).equals("Vấn đề về an ninh và an toàn")) {
 					comBoLyDoDoi.setSelectedItem("Vấn đề về an ninh và an toàn");
 				} else if (model.getValueAt(row, 3).equals("Vấn đề về tiện nghi")) {

@@ -33,7 +33,7 @@ import entity.TaiKhoan;
 
 public class FrmManHinhChinh extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private JButton btnHome, btnPhong, btnDichVu, btnDatPhong, btnDangXuat, btnDoiMK,btnNhanVien,btnBaoCao,selectedButton;
+	private JButton btnHome, btnPhong, btnDichVu, btnDangXuat, btnDoiMK,btnNhanVien,btnBaoCao,selectedButton;
 	public static JButton btnTaiKhoan;
 	private JTextField txtMaNV, txtHoTenNV;
 	private Color bgColor = new Color(255, 255, 255);
@@ -41,7 +41,6 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 	private JPanel pnLeft;
 	private JPanel pnBorder;
 	private JPanel pnHome;
-	private JPanel pnDatPhong;
 	private JPanel pnDichVu;
 	private JPanel pnPhong;
 	private JPanel pnTaiKhoan;
@@ -57,8 +56,7 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 
 	private FrmNhanVien frmNhanVien = new FrmNhanVien();
 	private FrmTaiKhoan frmTaiKhoan = new FrmTaiKhoan();
-	private FrmDatPhong frmDatPhong = new FrmDatPhong();
-	private FrmPhong frmPhong = new FrmPhong();
+	private FrmQLPhong frmQLPhong = new FrmQLPhong();
 	private FrmDichVu frmDichVu = new FrmDichVu();
 
 	private FrmBaoCao frmBaoCao=new FrmBaoCao();
@@ -97,7 +95,6 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 
 		btnHome = new JButton("Home");
 		btnPhong = new JButton("Sơ đồ phòng");
-		btnDatPhong = new JButton("Đặt Phòng");
 		btnNhanVien = new JButton("Nhân Viên");
 		btnTaiKhoan = new JButton("Tài Khoản");
 		btnDichVu = new JButton("Dịch Vụ");
@@ -118,11 +115,6 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		btnNhanVien.setPreferredSize(size);
 		btnNhanVien.setBackground(bgColor);
 		btnNhanVien.setForeground(fgColor);
-
-		btnDatPhong.setFont(font);
-		btnDatPhong.setPreferredSize(size);
-		btnDatPhong.setBackground(bgColor);
-		btnDatPhong.setForeground(fgColor);
 
 		btnPhong.setFont(font);
 		btnPhong.setPreferredSize(size);
@@ -176,7 +168,6 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 
 		btnHome.setIcon(newHomeIcon);
 		btnNhanVien.setIcon(newNVIcon);
-		btnDatPhong.setIcon(newdpicon);
 		btnPhong.setIcon(newpicon);
 		btnTaiKhoan.setIcon(newtkicon);
 		btnDichVu.setIcon(newdvicon);
@@ -184,7 +175,6 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 
 		pnLeft.add(btnHome);
 		pnLeft.add(btnPhong);
-		pnLeft.add(btnDatPhong);
 		pnLeft.add(btnNhanVien);
 		pnLeft.add(btnTaiKhoan);
 		pnLeft.add(btnDichVu);
@@ -192,7 +182,6 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		
 		btnHome.setBounds(25,20,150,40);
 		btnPhong.setBounds(25,70,150,40);
-		btnDatPhong.setBounds(25,120,150,40);
 		btnNhanVien.setBounds(25,170,150,40);
 		btnTaiKhoan.setBounds(25,220,150,40);
 		btnDichVu.setBounds(25,270,150,40);
@@ -265,11 +254,9 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		pnTaiKhoan = new JPanel();
 		pnTaiKhoan.add(frmTaiKhoan.contentPane);
 		
-		pnDatPhong = new JPanel();
-		pnDatPhong.add(frmDatPhong.contentPane);
 		
 		pnPhong = new JPanel();
-		pnPhong.add(frmPhong.contentPane);
+		pnPhong.add(frmQLPhong.contentPane);
 		
 		pnDichVu = new JPanel();
 		pnDichVu.add(frmDichVu.contentPane);
@@ -284,13 +271,10 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		mainPanel.add(pnHome, "Panel Home");
 		mainPanel.add(pnQLNhanVien, "pnQL NhanVien");
 		mainPanel.add(pnTaiKhoan, "Panel TaiKhoan");
-		mainPanel.add(pnDatPhong, "Panel DatPhong");
 		mainPanel.add(pnPhong, "Panel Phong");
 		mainPanel.add(pnDichVu, "Panel DichVu");
 
 		mainPanel.add(pnBaoCao,"Panel BaoCao");
-
-
 
 		pnBorder.add(mainPanel, BorderLayout.CENTER);
 	}
@@ -317,19 +301,6 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 					selectedButton.setBackground(bgColor);
 				}
 				selectedButton=btnNhanVien;
-				selectedButton.setBackground(Color.green);
-			}
-		});
-
-		
-		btnDatPhong.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				CardLayout c = (CardLayout) (pnDatPhong.getParent().getLayout());
-				c.show(pnDatPhong.getParent(), "Panel DatPhong");
-				if(selectedButton!=null) {
-					selectedButton.setBackground(bgColor);
-				}
-				selectedButton=btnDatPhong;
 				selectedButton.setBackground(Color.green);
 			}
 		});

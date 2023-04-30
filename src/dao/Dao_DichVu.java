@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import connectDB.ConnectDB;
 import entity.DichVu;
-
+import entity.NhanVien;
 import interfaces.I_DichVu;
 
 public class Dao_DichVu implements I_DichVu {
@@ -118,4 +118,36 @@ public class Dao_DichVu implements I_DichVu {
 		return n > 0;
 	}
 
+
+	@Override
+	public DichVu getDichVuTheoMa(String maDV) {
+		DichVu dv=null;
+		PreparedStatement sta = null;
+		try {
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			String sql = "Select * from DichVu where MADV = ?";
+			sta = con.prepareStatement(sql);
+			sta.setString(1, maDV);
+
+			ResultSet rs = sta.executeQuery();
+
+			while (rs.next()) {
+				String ma = rs.getString("MADV");
+				String ten = rs.getString("TENDV");
+				Double gia = rs.getDouble("GIA");
+				dv=new DichVu(ma, ten, gia);
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				sta.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return dv;
+	}
 }

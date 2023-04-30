@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -12,10 +14,15 @@ import java.awt.event.ItemListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -27,10 +34,15 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import org.apache.poi.ss.usermodel.Table;
 
 import com.toedter.calendar.JDateChooser;
 
+import bus.Bus_Phong;
 import connectDB.ConnectDB;
 import dao.Dao_Phong;
 import entity.Phong;
@@ -48,7 +60,7 @@ public class FrmTraPhong extends JFrame implements WindowListener,ActionListener
 	private static JPanel pnContent;
 	private JComboBox<String> cbTang,cbLoaiPhong,cbMaPH;
 	private static final int NUM_ROOMS = 30;
-	private Dao_Phong phong_dao = new Dao_Phong();
+	private Bus_Phong phong_dao = new Bus_Phong();
 	
 	public FrmTraPhong() {
 		setTitle("Trả Phòng");
@@ -61,9 +73,15 @@ public class FrmTraPhong extends JFrame implements WindowListener,ActionListener
 	public void createGui() {
 		JPanel pnBorder = new JPanel();
 		pnBorder.setLayout(new BorderLayout());
-		pnBorder.setBorder(BorderFactory.createTitledBorder("Quản lý trả phòng"));
-		//
+
+		JLabel lblTieuDe = new JLabel("TRẢ PHÒNG");
+		lblTieuDe.setForeground(Color.blue);
+		Font fTieuDe = new Font("Arial", Font.BOLD, 25);
+		lblTieuDe.setFont(fTieuDe);
+		
 		JPanel pnNorth = new JPanel(new BorderLayout());
+		pnNorth.add(lblTieuDe, BorderLayout.NORTH);
+		lblTieuDe.setHorizontalAlignment(SwingConstants.CENTER);
 		pnNorth.setPreferredSize(new Dimension(950, 300));
 		//Thông tin phòng thuê
 		JPanel pnPhongThue = new JPanel(new GridLayout(7,2,5,5));
@@ -121,6 +139,7 @@ public class FrmTraPhong extends JFrame implements WindowListener,ActionListener
 		pnNorth.add(pnTienTra,BorderLayout.CENTER);
 		pnBorder.add(pnNorth,BorderLayout.NORTH);
 		//pnCenter
+		
 		JPanel pnCenter = new JPanel();
 		pnCenter.setLayout(new BorderLayout());
 		pnBorder.add(pnCenter,BorderLayout.CENTER);
@@ -129,7 +148,7 @@ public class FrmTraPhong extends JFrame implements WindowListener,ActionListener
 		JPanel pnDSKhachHang = new JPanel();
 		pnDSKhachHang.setLayout(new BorderLayout());
 		pnDSKhachHang.setBorder(BorderFactory.createTitledBorder("Thông tin khách hàng"));
-		String colsKH[]= {"Mã khách hàng","Họ Tên","SĐT","CCCD","Email","Phai","Địa chỉ"};
+		String colsKH[]= {"Mã HD","Mã khách hàng","Họ Tên","SĐT","CCCD","Email","Phái","Địa chỉ"};
 		modelKhachHang = new DefaultTableModel(colsKH,0);
 		tableKhachHang = new JTable(modelKhachHang);
 		JScrollPane paneKH = new JScrollPane(tableKhachHang);
@@ -150,17 +169,25 @@ public class FrmTraPhong extends JFrame implements WindowListener,ActionListener
 		pnCenter.add(slitpane);
 		//pnChucNang
 		JPanel pnBottom = new JPanel();
-		pnBottom.setLayout(new FlowLayout());
 		pnBorder.add(pnBottom,BorderLayout.SOUTH);
 		pnBottom.add(bnTraPhong = new JButton("Trả phòng"));
-		bnTraPhong.setBackground(Color.BLUE);
-		bnTraPhong.setForeground(Color.WHITE);
+		Icon iconThoat = new ImageIcon("img/random.png");
+		Image imgThoat = ((ImageIcon)iconThoat).getImage();
+		Image newImgThoat = imgThoat.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+		Icon newIconThoat = new ImageIcon(newImgThoat);
+		bnTraPhong.setIcon(newIconThoat);
 		pnBottom.add(bnTraPhongvsIn = new JButton("Trả phòng và In"));
-		bnTraPhongvsIn.setBackground(Color.GREEN);
-		bnTraPhongvsIn.setForeground(Color.WHITE);
+		Icon iconIn = new ImageIcon("img/wrapper_report.png");
+		Image imgIn=((ImageIcon)iconIn).getImage();
+		Image newIn=imgIn.getScaledInstance(20, 20,java.awt.Image.SCALE_SMOOTH );
+		Icon IconIn= new ImageIcon(newIn);
+		bnTraPhongvsIn.setIcon(IconIn);
 		pnBottom.add(bnHuy = new JButton("Hủy"));
-		bnHuy.setBackground(Color.RED);
-		bnHuy.setForeground(Color.WHITE);
+		Icon iconHuy = new ImageIcon("img/exit.png");
+		Image imaHuy=((ImageIcon)iconHuy).getImage();
+		Image newIconHuy =imaHuy.getScaledInstance(20,20,java.awt.Image.SCALE_SMOOTH);
+		Icon newHuy=new ImageIcon(newIconHuy);
+		bnHuy.setIcon(newHuy);
 	
 		bnTraPhong.addActionListener(this);
 		bnTraPhongvsIn.addActionListener(this);
@@ -177,9 +204,38 @@ public class FrmTraPhong extends JFrame implements WindowListener,ActionListener
 				if(selected.equals("100")) {
 				try {
 					Connection connec =ConnectDB.getInstance().getConnection(); 
-					String sql = "SELECT kh.MAKH ,kh.HOTEN,kh.SDT,kh.CCCD,kh.EMAIL,kh.PHAI,kh.DIACHI,";
-				}catch(Exception ex) {
-					
+					String sql = "SELECT kh.MAKH ,kh.HOTEN,kh.SDT,kh.CCCD,kh.EMAIL,kh.PHAI,kh.DIACHI,c.MAHD,dv.TENDV,ct.SOLUONG,dv.GIA," +
+							"FROM ChiTietDatPhong AS c " +
+            	            "JOIN Phong AS p ON c.MAPHONG = p.MAPHONG " +
+            	            "JOIN HoaDon AS h ON c.MAHD=h.MAHD " +
+            	            "JOIN ChiTietSuDungDichVu ct ON h.MAHD=ct.MAHD " +
+            	            "JOIN KhachHang AS kh ON h.MAKH=kh.MAKH " +
+            	            "JOIN DichVu AS dv ON ct.MADV=dv.MADV " +
+            	            "WHERE h.NGAYLAPHD BETWEEN ? AND ?";
+					PreparedStatement ps = connec.prepareStatement(sql);
+					DefaultTableModel dmKH=(DefaultTableModel) tableKhachHang.getModel();
+//					DefaultTableModel dmDV =(DefaultTableModel) tableDichVu.getModel();
+            	    dmKH.setRowCount(0);
+//            	    dmDV.setRowCount(0);
+            	    ResultSet rs = ps.executeQuery();
+            	    Object obj[]=new Object[15];
+            	    while (rs.next()) {
+            	    	obj[0]=rs.getString(1);
+            	    	obj[1]=rs.getString(2);
+            	    	obj[2]=rs.getString(3);
+            	    	obj[3]=rs.getString(4);
+            	    	obj[4] =rs.getString(5);
+            	    	obj[5] =rs.getString(6);
+            	    	obj[6]=rs.getBoolean(7);
+            	    	obj[7]=rs.getString(8);
+            	    	obj[8]=rs.getString(9);
+            	    	obj[9]=rs.getString(10);
+            	    	obj[10]=rs.getInt(11);
+            	    	obj[11]=rs.getDouble(12);
+            	    	obj[12]=rs.getInt(11)*rs.getDouble(12);
+            	    }
+				}catch (SQLException ex) {
+            	    ex.printStackTrace();
 				}
 				
 			}
@@ -249,5 +305,4 @@ public class FrmTraPhong extends JFrame implements WindowListener,ActionListener
 		
 		
 	}
-
 }
