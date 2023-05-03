@@ -29,12 +29,4 @@ public class Bus_DichVu implements I_DichVu{
 		return dao_dv.xoa(id);
 	}
 
-
-	@Override
-	public DichVu getDichVuTheoMa(String ma) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-
 }

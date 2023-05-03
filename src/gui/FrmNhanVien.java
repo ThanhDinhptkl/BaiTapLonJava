@@ -203,6 +203,7 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 		JPanel pnTable = new JPanel();
 		model = new DefaultTableModel();
 		table = new JTable(model);
+		table.setRowHeight(25);
 		model.addColumn("Mã NV");
 		model.addColumn("Họ tên");
 		model.addColumn("Số ĐT");
@@ -210,7 +211,7 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 		model.addColumn("Tuổi");
 		model.addColumn("Tiền lương");
 
-		JScrollPane sp = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+		JScrollPane sp = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		sp.setPreferredSize(new Dimension(1000, 400));
 		pnCenter.add(sp);
@@ -244,17 +245,20 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 		String tuoi = txtTuoi.getText().trim();
 		String luong = txtLuong.getText().trim();
 
-
-		if(maNV.equals("")) {
-			txtMess.setText("Mã NV không được rỗng!! hãy nhấn random mã"
-					+ "");
+		if (maNV.equals("")) {
+			txtMess.setText("Mã NV không được rỗng!! hãy nhấn random mã" + "");
+			return false;
+		}
+		
+		if (hoTen.equals("")) {
+			txtMess.setText("Tên không được để trống!!");
 			return false;
 		}
 
-		if (!hoTen.matches("^[A-Z][a-z]+((\s[A-Z][a-z]*)+)$")) {
-			txtMess.setText("Tên chỉ chứa các ký tự chữ cái có thể gồm nhiều từ ngăn cách bởi dấu khoảng trắng");
-			return false;
-		}
+//		if (!hoTen.matches("^[A-Z][a-z]+((\s[A-Z][a-z]*)+)$")) {
+//			txtMess.setText("Tên chỉ chứa các ký tự chữ cái có thể gồm nhiều từ ngăn cách bởi dấu khoảng trắng");
+//			return false;
+//		}
 		if (!sdt.matches("^0\\d{9}")) {
 			txtMess.setText("SDT bắt đầu bằng 0 và có tổng cộng 10 số");
 			return false;
@@ -383,19 +387,18 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 
 		float floatValue = 0.0f;
 		try {
-		    NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
-		    floatValue = format.parse(stringNumber).floatValue();
+			NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
+			floatValue = format.parse(stringNumber).floatValue();
 		} catch (ParseException e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		}
-		txtLuong.setText(floatValue+"");
+		txtLuong.setText(floatValue + "");
 	}
 
 	public void timTheoMaNV() {
 		String ma = txtTimKiem.getText().trim();
 		NhanVien nv = nhanVien_bus.getTheoMaNV(ma);
 		if (nv != null) {
-			
 			DefaultTableModel dm = (DefaultTableModel) table.getModel();
 			dm.getDataVector().removeAllElements();
 			model.addRow(new Object[] { nv.getMaNV(), nv.getHoTen(), nv.getSdt(), nv.isPhai() ? "Nam" : "Nữ",
@@ -426,7 +429,7 @@ public class FrmNhanVien extends JFrame implements ActionListener, MouseListener
 	}
 
 	public String formatLuong(float luong) {
-		DecimalFormat df = new DecimalFormat("#,##0.00");
+		DecimalFormat df = new DecimalFormat("#,##0VND");
 		String tien = df.format(luong);
 		return tien;
 	}

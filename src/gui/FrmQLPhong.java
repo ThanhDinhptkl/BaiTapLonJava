@@ -46,6 +46,7 @@ import bus.Bus_Tang;
 import connectDB.ConnectDB;
 import entity.NhanVien;
 import entity.Phong;
+import entity.TaiKhoan;
 import entity.Tang;
 
 public class FrmQLPhong extends JFrame implements ActionListener, MouseListener {
@@ -80,13 +81,13 @@ public class FrmQLPhong extends JFrame implements ActionListener, MouseListener 
 	private JMenuItem itDoiPhong;
 	private JMenuItem itXemThongTinKhach;
 	private JMenuItem itCapNhatDichVu;
-	private JMenuItem itDonPhong;
-	private JMenuItem itSuaPhong;
 	private JTextField txtTimKiem;
 	private JButton btnTim;
 	private JCheckBox chkLoc;
 	private JButton btnLoc;
 	private String maPhongDeTimKhachHang;
+	private JTextField txtMess;
+	private JButton btnThemTang;
 
 	public FrmQLPhong() {
 		super("Thông tin nhân viên");
@@ -120,6 +121,7 @@ public class FrmQLPhong extends JFrame implements ActionListener, MouseListener 
 		Box b3 = Box.createHorizontalBox();
 		Box b4 = Box.createHorizontalBox();
 		Box b5 = Box.createHorizontalBox();
+		Box b6 = Box.createHorizontalBox();
 
 		b.add(b1);
 		b.add(Box.createVerticalStrut(5));
@@ -131,6 +133,9 @@ public class FrmQLPhong extends JFrame implements ActionListener, MouseListener 
 		b.add(Box.createVerticalStrut(5));
 		b.add(b5);
 		b.add(Box.createVerticalStrut(5));
+		b.add(b6);
+		b.add(Box.createVerticalStrut(5));
+
 
 		lblMaP = new JLabel("Mã phòng: ");
 		lblTenP = new JLabel("Tên phòng: ");
@@ -140,7 +145,6 @@ public class FrmQLPhong extends JFrame implements ActionListener, MouseListener 
 		lblGia = new JLabel("Giá: ");
 
 		txtMaP = new JTextField();
-//		txtMaP.setEditable(false);
 		b1.add(lblMaP);
 		b1.add(txtMaP);
 
@@ -167,6 +171,13 @@ public class FrmQLPhong extends JFrame implements ActionListener, MouseListener 
 		txtGia = new JTextField();
 		b4.add(lblGia);
 		b4.add(txtGia);
+		
+		txtMess = new JTextField();
+		txtMess.setEditable(false);
+		txtMess.setFont(new Font("Arial", Font.ITALIC, 12));
+		txtMess.setBorder(null);
+		txtMess.setForeground(Color.red);
+		b5.add(txtMess);
 
 		lblMaP.setPreferredSize(lblLoai.getPreferredSize());
 		lblTenP.setPreferredSize(lblLoai.getPreferredSize());
@@ -213,13 +224,19 @@ public class FrmQLPhong extends JFrame implements ActionListener, MouseListener 
 		String[] cols = { "Mã phòng", "Tên phòng", "Loại phòng", "Trạng thái", "Mã tầng", "Giá" };
 		model = new DefaultTableModel(cols, 0);
 		table = new JTable(model);
+		table.setRowHeight(25);
 		JScrollPane sp = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		sp.setPreferredSize(new Dimension(1000, 400));
+		sp.setPreferredSize(new Dimension(1000, 350));
 		pnTable.add(sp, BorderLayout.CENTER);
+		JPanel pnThemTang = new JPanel();
+		
+		pnTable.add(pnThemTang, BorderLayout.SOUTH);
+		btnThemTang = new JButton("Thêm tầng");
+		pnThemTang.add(btnThemTang);
 		pnBorder.add(pnTable, BorderLayout.SOUTH);
 
-		napDuLieuPhongTuCSDL(phong_bus.getAllPhong());
+		napDuLieuPhongTuCSDL(phong_bus.getPhongTheoTrangThai(true));
 		napComboBoxTang(tang_bus.getAllTang());
 		napComboBoxLoaiPhong();
 
@@ -236,13 +253,13 @@ public class FrmQLPhong extends JFrame implements ActionListener, MouseListener 
 		btnReset.addActionListener(this);
 		btnLoc.addActionListener(this);
 		btnTim.addActionListener(this);
+		btnThemTang.addActionListener(this);
 
 		itDatPhong.addActionListener(this);
 		itTraPhong.addActionListener(this);
 		itDoiPhong.addActionListener(this);
 		itCapNhatDichVu.addActionListener(this);
 		itXemThongTinKhach.addActionListener(this);
-
 
 	}
 
@@ -302,7 +319,6 @@ public class FrmQLPhong extends JFrame implements ActionListener, MouseListener 
 		iconDichVu.setImage(iconDichVu.getImage().getScaledInstance(20, 15, Image.SCALE_SMOOTH));
 		itCapNhatDichVu.setIcon(iconDichVu);
 
-
 		popupMenu.add(itDatPhong);
 		popupMenu.add(itTraPhong);
 		popupMenu.add(itDoiPhong);
@@ -312,7 +328,53 @@ public class FrmQLPhong extends JFrame implements ActionListener, MouseListener 
 	}
 
 	public boolean valiDate() {
+		String maP = txtMaP.getText().trim();
+		String tenP = txtTenP.getText().trim();
+		String gia = txtGia.getText().trim();
+		
+		
+		
+		if(!maP.matches("^\\d{3,4}$")) {
+			txtMess.setText("Mã có từ 3 - 4 kí số!");
+			txtMaP.requestFocus();
+			return false;
+		}else {
+			String maTang = cboMaTang.getSelectedItem().toString();
+			if(maTang.charAt(0) != maP.charAt(0)){
+				txtMess.setText("Mã phòng có số đầu tiên là mã tầng");
+				txtMaP.requestFocus();
+				return false;
+			}else {
+				txtMess.setText("");
+			}
+		}
+		if(tenP.equals("")) {
+			txtMess.setText("Tên phòng không được rỗng");
+			txtTenP.requestFocus();
+			return false;
+		}
+		if(gia.equals("")) {
+			txtMess.setText("Giá không được rỗng");
+			txtGia.requestFocus();
+			return false;
+		}else {
+			if(!isDouble(gia)) {
+				txtMess.setText("Giá phải là số");
+				txtGia.requestFocus();
+				return false;
+			}
+		}
+		
 		return true;
+	}
+	
+	public boolean isDouble(String s) {
+		try {
+			Double.parseDouble(s);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
 	}
 
 	public Phong revertPhongFromFIelds() {
@@ -368,7 +430,6 @@ public class FrmQLPhong extends JFrame implements ActionListener, MouseListener 
 		txtTenP.setText(table.getValueAt(r, 1).toString());
 		cboLoaiPhong.setSelectedItem(table.getValueAt(r, 2));
 		boolean tt = table.getValueAt(r, 3) == "Trống" ? true : false;
-		System.out.println(tt);
 		if (tt == true) {
 			radTrong.setSelected(true);
 		} else {
@@ -503,7 +564,8 @@ public class FrmQLPhong extends JFrame implements ActionListener, MouseListener 
 		}
 		if (o.equals(itDatPhong)) {
 			setVisible(false);
-			new FrmDatPhong().setVisible(true);
+			String maP = maPhongDeTimKhachHang;
+			new FrmDatPhong(maP).setVisible(true);
 		}
 		if (o.equals(itTraPhong)) {
 			new FrmTraPhong().setVisible(true);
@@ -511,32 +573,32 @@ public class FrmQLPhong extends JFrame implements ActionListener, MouseListener 
 		if (o.equals(itDoiPhong)) {
 			new FrmDoiPhong().setVisible(true);
 		}
+		if(o.equals(btnThemTang)) {
+			new FrmTang().setVisible(true);
+		}
 		if (o.equals(itXemThongTinKhach)) {
 			String maKH = "";
 			PreparedStatement sta = null;
 			try {
 				Connection con = ConnectDB.getInstance().getConnection();
-				String sql = "Select * from Phong p "
-						+ "join ChiTietDatPhong ctdp on p.MAPHONG = ctdp.MAPHONG "
-						+ "join HoaDon hd on hd.MAHD = ctdp.MAHD "
-						+ "where p.MAPHONG = ?";
+				String sql = "Select * from Phong p " + "join ChiTietDatPhong ctdp on p.MAPHONG = ctdp.MAPHONG "
+						+ "join HoaDon hd on hd.MAHD = ctdp.MAHD " + "where p.MAPHONG = ?";
 				sta = con.prepareStatement(sql);
 				sta.setString(1, maPhongDeTimKhachHang);
-				
+
 				ResultSet rs = sta.executeQuery();
-				
-				while(rs.next()) {
+
+				while (rs.next()) {
 					maKH += rs.getString("MAKH");
 				}
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
-			if(maKH.equals("")) {
+			if (maKH.equals("")) {
 				new FrmKhachHang().setVisible(true);
-			}else {
+			} else {
 				new FrmKhachHang(maKH).setVisible(true);
 			}
-			
 		}
 	}
 

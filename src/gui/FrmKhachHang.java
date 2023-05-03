@@ -105,6 +105,7 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
 	public void createGUI() {
 		JPanel pnBorder = new JPanel();
 		pnBorder.setLayout(new BorderLayout());
+		pnBorder.setPreferredSize(new Dimension(900, 600));
 		add(pnBorder);
 
 		JPanel pnNorth = new JPanel();
@@ -282,7 +283,7 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
 		String hoTen = txtHoTen.getText().trim();
 		String sdt = txtSDT.getText().trim();
 		String cccd = txtCCCD.getText().trim();
-		String email = txtEmail.getText().trim();
+//		String email = txtEmail.getText().trim();
 
 		
 		if(maKH.equals("")) {
@@ -301,11 +302,11 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
 			txtMess.setText("CCCD phải bắt đầu bằng 0 và có 12 chữ số");
 			return false;
 		}
-		if (!email.matches(
-				"^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")) {
-			txtMess.setText("Email sai cú pháp!");
-			return false;
-		}
+//		if (!email.matches(
+//				"^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")) {
+//			txtMess.setText("Email sai cú pháp!");
+//			return false;
+//		}
 
 		txtMess.setText("");
 		return true;
@@ -317,8 +318,14 @@ public class FrmKhachHang extends JFrame implements ActionListener, MouseListene
 		String sdt = txtSDT.getText().trim();
 		String cccd = txtCCCD.getText().trim();
 		String email = txtEmail.getText().trim();
+		if(email.equals("")) {
+			email = "null";
+		}
 		boolean phai = radNam.isSelected();
 		String diaChi = txtDiaChi.getText().trim();
+		if(diaChi.equals("")) {
+			email = "null";
+		}
 		KhachHang kh = new KhachHang(maKH, hoTen, sdt, cccd, email, phai, diaChi);
 		return kh;
 	}

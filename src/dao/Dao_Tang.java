@@ -178,4 +178,31 @@ public class Dao_Tang implements I_Tang {
 		return dsTang;
 	}
 
+	@Override
+	public int count() {
+		PreparedStatement sta = null;
+		int n = 0;
+		try {
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+
+			String sql = "Select * from Tang";
+			sta = con.prepareStatement(sql);
+
+			ResultSet rs = sta.executeQuery();
+			while(rs.next()) {
+				n++;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				sta.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
 }

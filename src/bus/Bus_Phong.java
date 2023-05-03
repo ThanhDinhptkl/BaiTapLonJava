@@ -48,4 +48,9 @@ public class Bus_Phong implements I_Phong{
 		return dao_phong.xoa(idPhong);
 	}
 
+	@Override
+	public boolean capNhatTrangThai(boolean tt, String maP) {
+		return dao_phong.capNhatTrangThai(tt, maP);
+	}
+
 }

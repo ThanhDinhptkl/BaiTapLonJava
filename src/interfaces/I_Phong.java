@@ -18,6 +18,8 @@ public interface I_Phong {
 	public boolean them(Phong phong);
 
 	public boolean capNhat(Phong phong);
+	
+	public boolean capNhatTrangThai(boolean tt, String maP);
 
 	public boolean xoa(String idPhong);
 }

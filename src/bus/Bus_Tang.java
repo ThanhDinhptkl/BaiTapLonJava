@@ -39,4 +39,9 @@ public class Bus_Tang implements I_Tang {
 		return dao_tang.getTangTheoTenTang(tenTang);
 	}
 
+	@Override
+	public int count() {
+		return dao_tang.count();
+	}
+
 }

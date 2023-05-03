@@ -159,9 +159,6 @@ public class FrmDichVu extends JFrame implements ActionListener, MouseListener {
 
 		napDuLieuDichVuTuCSDL(dichvu_bus.getAllDichVu());
 		napComboBoxDichVu(dichvu_bus.getAllDichVu());
-		String selected=(String) cboDichVu.getSelectedItem();
-		System.out.println(selected);
-
 		contentPane = new JPanel();
 		contentPane.add(pnBorder);
 		add(contentPane);

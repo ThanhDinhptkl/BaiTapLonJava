@@ -7,12 +7,15 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -20,15 +23,18 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -42,7 +48,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import com.toedter.calendar.JDateChooser;
 import connectDB.ConnectDB;
 
-public class FrmBaoCao extends JFrame implements ActionListener{
+public class FrmBaoCao extends JFrame implements ActionListener,MouseListener{
 	/**
 	 * 
 	 */
@@ -50,26 +56,23 @@ public class FrmBaoCao extends JFrame implements ActionListener{
 	public static JPanel contentPane;
 	private JLabel lblTu,lblDen,lblLocTheo,lblTongTien;
 	private JTextField txtTongTien;
-	private JButton btnThoat,btnXuatBaoCao,btnHienThiBieuDo,btnLoc;
+	private JButton btnXuatBaoCao,btnHienThiBieuDo,btnLoc;
 	private JDateChooser csTu,csDen;
-	private JTable table;
+	private JTable table,tableDichVu;
     private JComboBox<String> cbLoc;
-    private DefaultTableModel model;
-    private JCheckBox chkDichVu;
+    private DefaultTableModel model,modelDichVu;
+    private JPopupMenu popupMenu;
+    private JMenuItem itXemdichVu;
 	public FrmBaoCao() {
 		super("Báo cáo");
 		setSize(1050, 700);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
-		
-		
-
 		createGUI();
 	}
 	public void createGUI(){
 		JPanel pnBorder = new JPanel();
 		pnBorder.setLayout(new BorderLayout());
-//		pnBorder.setBackground(Color.red);
 		pnBorder.setBorder(BorderFactory.createTitledBorder("Báo cáo - Thống kê"));
 		
 		JPanel pnNorth=new JPanel();
@@ -77,8 +80,13 @@ public class FrmBaoCao extends JFrame implements ActionListener{
 		
 		pnNorth.add(lblTu=new JLabel("Từ ngày:"));
 		pnNorth.add(csTu=new JDateChooser());
+		csTu.setDateFormatString("dd/MM/yyyy");
+		csTu.setDate(Calendar.getInstance().getTime());
 		pnNorth.add(lblDen=new JLabel("Đến ngày:"));
 		pnNorth.add(csDen=new JDateChooser());
+		csDen.setDateFormatString("dd/MM/yyyy");
+		csDen.setDate(Calendar.getInstance().getTime());
+		
 		pnNorth.add(lblLocTheo=new JLabel("Lọc theo:"));
 		pnNorth.add(cbLoc=new JComboBox<String>());
 		cbLoc.setPreferredSize(new Dimension(150,30));
@@ -86,7 +94,6 @@ public class FrmBaoCao extends JFrame implements ActionListener{
 		cbLoc.addItem("Tháng qua");
 		cbLoc.addItem("Quý qua");
 		pnNorth.add(btnLoc=new JButton("Lọc"));
-		
 		Icon iconBieuDo = new ImageIcon("img/schema_preport.png");
 		Image imgBieuDo = ((ImageIcon)iconBieuDo).getImage();
 		Image newImgBieuDo = imgBieuDo.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
@@ -101,13 +108,6 @@ public class FrmBaoCao extends JFrame implements ActionListener{
 		pnNorth.add(btnXuatBaoCao=new JButton("Xuất báo cáo"));
 		btnXuatBaoCao.setIcon(newIconXuatBaoCao);
 		
-		Icon iconThoat = new ImageIcon("img/exit.png");
-		Image imgThoat = ((ImageIcon)iconThoat).getImage();
-		Image newImgThoat = imgThoat.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
-		Icon newIconThoat = new ImageIcon(newImgThoat);
-		pnNorth.add(btnThoat=new JButton("Thoát"));
-		btnThoat.setIcon(newIconThoat);
-		pnNorth.add(chkDichVu=new JCheckBox("Xem dịch vụ"));
 		
 		lblTu.setBounds(20, 20, 60, 30);
 		csTu.setBounds(100, 20, 150, 30);
@@ -116,19 +116,31 @@ public class FrmBaoCao extends JFrame implements ActionListener{
 		lblLocTheo.setBounds(20, 120, 60, 30);
 		cbLoc.setBounds(100, 120, 150, 30);
 		btnLoc.setBounds(270,70,60,30);
-		chkDichVu.setBounds(270,5,150,60);
-		btnHienThiBieuDo.setBounds(440, 20, 200, 30);
-		btnXuatBaoCao.setBounds(630, 20, 150, 30);
-		btnThoat.setBounds(780, 20, 120, 30);
+		btnHienThiBieuDo.setBounds(440, 20, 250, 30);
+		btnXuatBaoCao.setBounds(700, 20, 150, 30);
 		pnNorth.setPreferredSize(new Dimension(900,170)); 
-
-        String[] columnNames = {"Mã HD","Mã Phòng","Tên khách hàng","Ngày đặt","Ngày trả","Số người","Giá phòng","Ngày lập hóa đơn","Số lượng dịch vụ","Tên dịch vụ","Giá dịch vụ","Tổng tiền dịch vụ","Tổng tiền thanh toán"};
-        model = new DefaultTableModel(columnNames, 0);
-        table = new JTable(model);
-        JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        joinWithPhong();
-        scrollPane.setPreferredSize(new Dimension(900,330));
+		
+		String[] columnNames = {"Mã HD","Mã Phòng","Tên khách hàng","Ngày đặt","Ngày trả","Số người","Tiền phòng","Ngày lập hóa đơn","Tiền dịch vụ","Tổng tiền"};
+		model = new DefaultTableModel(columnNames, 0);
+		table = new JTable(model);
+		joinWithPhong();
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setPreferredSize(new Dimension(900, 165));
+		
+		String [] column2= {"Mã hóa đơn","Tên dịch vụ","Số lượng","Giá"};
+		modelDichVu=new DefaultTableModel(column2,0);
+		tableDichVu=new JTable(modelDichVu);
+		JScrollPane scrollPane2=new JScrollPane(tableDichVu);
+		scrollPane2.setPreferredSize(new Dimension(900,165));
+		
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane, scrollPane2);
+		splitPane.setDividerLocation(0.5);
+		splitPane.setEnabled(false);
+		
+		popupMenu=new JPopupMenu();
+		itXemdichVu=new JMenuItem("Xem chi tiết dịch vụ");
+		popupMenu.add(itXemdichVu);
+		
         
         JPanel pnSouth=new JPanel();
         pnSouth.setLayout(null);
@@ -148,84 +160,83 @@ public class FrmBaoCao extends JFrame implements ActionListener{
                 String selectedOption = cbLoc.getSelectedItem().toString();
                 if (selectedOption.equals("Tuần qua")) {
                 	try {
-                	    Connection con = ConnectDB.getInstance().getConnection();
-                	    
-                	    // Tính ngày bắt đầu và kết thúc của khoảng thời gian cần tìm
-                	    Calendar cal = Calendar.getInstance();
+    					Connection con = ConnectDB.getInstance().getConnection();
+    					DefaultTableModel dm=(DefaultTableModel) table.getModel();
+    					dm.setRowCount(0);
+    					Calendar cal = Calendar.getInstance();
                 	    cal.add(Calendar.WEEK_OF_YEAR, -1); // lùi về 1 tuần
                 	    java.sql.Date fromDate = new java.sql.Date(cal.getTimeInMillis());
                 	    java.sql.Date toDate = new java.sql.Date(System.currentTimeMillis());
-
-                	    String sql = "SELECT c.MAHD, c.MAPHONG, kh.HOTEN, c.NGAYDAT, c.NGAYTRA, c.SONGUOI, p.GIA, h.NGAYLAPHD ,ct.SOLUONG ,dv.TENDV ,dv.GIA " +
-                	            "FROM ChiTietDatPhong AS c " +
-                	            "JOIN Phong AS p ON c.MAPHONG = p.MAPHONG " +
-                	            "JOIN HoaDon AS h ON c.MAHD=h.MAHD " +
-                	            "JOIN ChiTietSuDungDichVu ct ON h.MAHD=ct.MAHD " +
-                	            "JOIN KhachHang AS kh ON h.MAKH=kh.MAKH " +
-                	            "JOIN DichVu AS dv ON ct.MADV=dv.MADV " +
-                	            "WHERE h.NGAYLAPHD BETWEEN ? AND ?";
-                	    PreparedStatement ps = con.prepareStatement(sql);
+    					String sql = "SELECT c.MAHD, c.MAPHONG, kh.HOTEN, c.NGAYDAT, c.NGAYTRA, c.SONGUOI, p.GIA, h.NGAYLAPHD, SUM(ct.SOLUONG * dv.GIA) AS TONGTIENDICHVU, p.GIA + SUM(ct.SOLUONG * dv.GIA) AS TONGTIEN " +
+    		                    "FROM ChiTietDatPhong AS c " +
+    		                    "JOIN Phong AS p ON c.MAPHONG = p.MAPHONG " +
+    		                    "JOIN HoaDon AS h ON c.MAHD=h.MAHD " +
+    		                    "JOIN ChiTietSuDungDichVu ct ON h.MAHD=ct.MAHD " +
+    		                    "JOIN KhachHang AS kh ON h.MAKH=kh.MAKH " +
+    							"JOIN DichVu AS dv ON ct.MADV=dv.MADV " +
+    							"WHERE h.NGAYLAPHD BETWEEN ? AND ? " +
+    		                    "GROUP BY c.MAHD, c.MAPHONG, kh.HOTEN, c.NGAYDAT, c.NGAYTRA, c.SONGUOI, p.GIA, h.NGAYLAPHD ";
+    					
+    					PreparedStatement ps = con.prepareStatement(sql);
                 	    ps.setDate(1, fromDate);
                 	    ps.setDate(2, toDate);
-                	    DefaultTableModel dm=(DefaultTableModel) table.getModel();
-                	    dm.setRowCount(0);
-                	    ResultSet rs = ps.executeQuery();
-                	    Object obj[]=new Object[15];
-                	    while (rs.next()) {
-                	        obj[0]=rs.getString(1);
-                	        obj[1]=rs.getInt(2);
-                	        obj[2]=rs.getString(3);
-                	        obj[3]=rs.getDate(4);
-                	        obj[4]=rs.getDate(5);
-                	        obj[5]=rs.getInt(6);
-                	        obj[6]=rs.getDouble(7);
-                	        obj[7]=rs.getDate(8);
-                	        obj[8]=rs.getInt(9);
-                	        obj[9]=rs.getString(10);
-                	        obj[10]=rs.getDouble(11);
-                	        obj[11]=rs.getDouble(9) * rs.getDouble(11); // tính tổng tiền dịch vụ
-                	        obj[12]=rs.getDouble(7) + rs.getDouble(11) * rs.getDouble(9); // tính tổng tiền bao gồm phòng và dịch vụ
-                	        dm.addRow(obj);
-                	    }
-                	} catch (SQLException ex) {
-                	    ex.printStackTrace();
-                	}
+    					ResultSet rs = ps.executeQuery();
+    					Object obj[]=new Object[15];
+    					while (rs.next()) {
+    						obj[0]=rs.getString(1);
+    						obj[1]=rs.getInt(2);
+    						obj[2]=rs.getString(3);
+    						obj[3]=rs.getDate(4);
+    						obj[4]=rs.getDate(5);
+    						obj[5]=rs.getInt(6);
+    						obj[6]=rs.getDouble(7);
+    						obj[7]=rs.getDate(8);
+    						obj[8]=rs.getDouble(9);
+    						obj[9]=rs.getDouble(10);
+    				        dm.addRow(obj);
+    					}
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
 
-                } else if (selectedOption.equals("Tháng qua")) {
+                } else if (selectedOption.equals("Tháng qua")) {             	
                 	try {
-                	    Connection con = ConnectDB.getInstance().getConnection();
-                	    String sql = "SELECT c.MAHD, c.MAPHONG, kh.HOTEN, c.NGAYDAT, c.NGAYTRA, c.SONGUOI, p.GIA, h.NGAYLAPHD ,ct.SOLUONG ,dv.TENDV ,dv.GIA " +
-                	            "FROM ChiTietDatPhong AS c " +
-                	            "JOIN Phong AS p ON c.MAPHONG = p.MAPHONG " +
-                	            "JOIN HoaDon AS h ON c.MAHD=h.MAHD " +
-                	            "JOIN ChiTietSuDungDichVu ct ON h.MAHD=ct.MAHD " +
-                	            "JOIN KhachHang AS kh ON h.MAKH=kh.MAKH " +
-                	            "JOIN DichVu AS dv ON ct.MADV=dv.MADV " +
-                	            "WHERE h.NGAYLAPHD >= DATEADD(MONTH, -1, GETDATE())";
-                	    PreparedStatement ps = con.prepareStatement(sql);
-                	    DefaultTableModel dm=(DefaultTableModel) table.getModel();
-                	    dm.setRowCount(0);
-                	    ResultSet rs = ps.executeQuery();
-                	    Object obj[]=new Object[15];
-                	    while (rs.next()) {
-                	        obj[0]=rs.getString(1);
-                	        obj[1]=rs.getInt(2);
-                	        obj[2]=rs.getString(3);
-                	        obj[3]=rs.getDate(4);
-                	        obj[4]=rs.getDate(5);
-                	        obj[5]=rs.getInt(6);
-                	        obj[6]=rs.getDouble(7);
-                	        obj[7]=rs.getDate(8);
-                	        obj[8]=rs.getInt(9);
-                	        obj[9]=rs.getString(10);
-                	        obj[10]=rs.getDouble(11);
-                	        obj[11]=rs.getDouble(9) * rs.getDouble(11); // tính tổng tiền dịch vụ
-                	        obj[12]=rs.getDouble(7) + rs.getDouble(11) * rs.getDouble(9); // tính tổng tiền bao gồm phòng và dịch vụ
-                	        dm.addRow(obj);    
-                	    }
-                	} catch (SQLException ex) {
-                	    ex.printStackTrace();
-                	}
+    					Connection con = ConnectDB.getInstance().getConnection();
+    					Calendar cal = Calendar.getInstance();
+                	    cal.add(Calendar.WEEK_OF_YEAR, -1); // lùi về 1 tuần
+                	    java.sql.Date fromDate = new java.sql.Date(cal.getTimeInMillis());
+                	    java.sql.Date toDate = new java.sql.Date(System.currentTimeMillis());
+    					String sql = "SELECT c.MAHD, c.MAPHONG, kh.HOTEN, c.NGAYDAT, c.NGAYTRA, c.SONGUOI, p.GIA, h.NGAYLAPHD, SUM(ct.SOLUONG * dv.GIA) AS TONGTIENDICHVU, p.GIA + SUM(ct.SOLUONG * dv.GIA) AS TONGTIEN " +
+    		                    "FROM ChiTietDatPhong AS c " +
+    		                    "JOIN Phong AS p ON c.MAPHONG = p.MAPHONG " +
+    		                    "JOIN HoaDon AS h ON c.MAHD=h.MAHD " +
+    		                    "JOIN ChiTietSuDungDichVu ct ON h.MAHD=ct.MAHD " +
+    		                    "JOIN KhachHang AS kh ON h.MAKH=kh.MAKH " +
+    							"JOIN DichVu AS dv ON ct.MADV=dv.MADV " +
+    							"WHERE h.NGAYLAPHD >= DATEADD(MONTH, -1, GETDATE())" +
+    		                    "GROUP BY c.MAHD, c.MAPHONG, kh.HOTEN, c.NGAYDAT, c.NGAYTRA, c.SONGUOI, p.GIA, h.NGAYLAPHD ";
+    					
+    					PreparedStatement ps = con.prepareStatement(sql);
+    					DefaultTableModel dm=(DefaultTableModel) table.getModel();
+    					dm.setRowCount(0);
+    					ResultSet rs = ps.executeQuery();
+    					Object obj[]=new Object[15];
+    					while (rs.next()) {
+    						obj[0]=rs.getString(1);
+    						obj[1]=rs.getInt(2);
+    						obj[2]=rs.getString(3);
+    						obj[3]=rs.getDate(4);
+    						obj[4]=rs.getDate(5);
+    						obj[5]=rs.getInt(6);
+    						obj[6]=rs.getDouble(7);
+    						obj[7]=rs.getDate(8);
+    						obj[8]=rs.getDouble(9);
+    						obj[9]=rs.getDouble(10);
+    						dm.addRow(obj); 
+    					}
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
 
 
                 } else if (selectedOption.equals("Quý qua")) {
@@ -242,66 +253,41 @@ public class FrmBaoCao extends JFrame implements ActionListener{
                 	cal.add(Calendar.MONTH, 3);
                 	cal.add(Calendar.DAY_OF_MONTH, -1);
                 	Date toDate = cal.getTime();
-                	
-//                	Calendar cal = Calendar.getInstance();
-//                	int currentQuarter = (cal.get(Calendar.MONTH) / 3) + 1;
-//                	int currentYear = cal.get(Calendar.YEAR);
-//
-//                	// Tính quý trước
-//                	int previousQuarter = currentQuarter - 1;
-//                	int previousYear = currentYear;
-//                	if (previousQuarter == 0) {
-//                	    previousQuarter = 4;
-//                	    previousYear--;
-//                	}
-//
-//                	// Tính ngày bắt đầu của quý trước
-//                	cal.set(Calendar.YEAR, previousYear);
-//                	cal.set(Calendar.MONTH, (previousQuarter - 1) * 3);
-//                	cal.set(Calendar.DAY_OF_MONTH, 1);
-//                	Date fromDate = cal.getTime();
-//
-//                	// Tính ngày kết thúc của quý trước
-//                	cal.add(Calendar.MONTH, 3);
-//                	cal.add(Calendar.DAY_OF_MONTH, -1);
-//                	Date toDate = cal.getTime();
-
                 	try {
-                	    Connection con = ConnectDB.getInstance().getConnection();
-                	    String sql = "SELECT c.MAHD, c.MAPHONG, kh.HOTEN, c.NGAYDAT, c.NGAYTRA, c.SONGUOI, p.GIA, h.NGAYLAPHD ,ct.SOLUONG ,dv.TENDV ,dv.GIA " +
-                	                "FROM ChiTietDatPhong AS c " +
-                	                "JOIN Phong AS p ON c.MAPHONG = p.MAPHONG " +
-                	                "JOIN HoaDon AS h ON c.MAHD=h.MAHD " +
-                	                "JOIN ChiTietSuDungDichVu ct ON h.MAHD=ct.MAHD " +
-                	                "JOIN KhachHang AS kh ON h.MAKH=kh.MAKH " +
-                	                "JOIN DichVu AS dv ON ct.MADV=dv.MADV " +
-                	                "WHERE h.NGAYLAPHD BETWEEN ? AND ?";
-                	    PreparedStatement ps = con.prepareStatement(sql);
-                	    ps.setDate(1, new java.sql.Date(fromDate.getTime()));
-                	    ps.setDate(2, new java.sql.Date(toDate.getTime()));
-                	    DefaultTableModel dm=(DefaultTableModel) table.getModel();
-                	    dm.setRowCount(0);
-                	    ResultSet rs = ps.executeQuery();
-                	    Object obj[]=new Object[15];
-                	    while (rs.next()) {
-                	        obj[0]=rs.getString(1);
-                	        obj[1]=rs.getInt(2);
-                	        obj[2]=rs.getString(3);
-                	        obj[3]=rs.getDate(4);
-                	        obj[4]=rs.getDate(5);
-                	        obj[5]=rs.getInt(6);
-                	        obj[6]=rs.getDouble(7);
-                	        obj[7]=rs.getDate(8);
-                	        obj[8]=rs.getInt(9);
-                	        obj[9]=rs.getString(10);
-                	        obj[10]=rs.getDouble(11);
-                	        obj[11]=rs.getDouble(9) * rs.getDouble(11); // tính tổng tiền dịch vụ
-                	        obj[12]=rs.getDouble(7) + rs.getDouble(11) * rs.getDouble(9); // tính tổng tiền bao gồm phòng và dịch vụ
-                	        dm.addRow(obj);
-                	    }
-                	} catch (SQLException ex) {
-                	    ex.printStackTrace();
-                	}
+    					Connection con = ConnectDB.getInstance().getConnection();
+    					DefaultTableModel dm=(DefaultTableModel) table.getModel();
+    					dm.setRowCount(0);
+    					String sql = "SELECT c.MAHD, c.MAPHONG, kh.HOTEN, c.NGAYDAT, c.NGAYTRA, c.SONGUOI, p.GIA, h.NGAYLAPHD, SUM(ct.SOLUONG * dv.GIA) AS TONGTIENDICHVU, p.GIA + SUM(ct.SOLUONG * dv.GIA) AS TONGTIEN " +
+    		                    "FROM ChiTietDatPhong AS c " +
+    		                    "JOIN Phong AS p ON c.MAPHONG = p.MAPHONG " +
+    		                    "JOIN HoaDon AS h ON c.MAHD=h.MAHD " +
+    		                    "JOIN ChiTietSuDungDichVu ct ON h.MAHD=ct.MAHD " +
+    		                    "JOIN KhachHang AS kh ON h.MAKH=kh.MAKH " +
+    							"JOIN DichVu AS dv ON ct.MADV=dv.MADV " +
+    							"WHERE h.NGAYLAPHD BETWEEN ? AND ? " +
+    		                    "GROUP BY c.MAHD, c.MAPHONG, kh.HOTEN, c.NGAYDAT, c.NGAYTRA, c.SONGUOI, p.GIA, h.NGAYLAPHD ";
+    					
+    					PreparedStatement ps = con.prepareStatement(sql);
+    					ps.setDate(1, new java.sql.Date(fromDate.getTime()));
+    					ps.setDate(2, new java.sql.Date(toDate.getTime()));
+    					ResultSet rs = ps.executeQuery();
+    					Object obj[]=new Object[15];
+    					while (rs.next()) {
+    						obj[0]=rs.getString(1);
+    						obj[1]=rs.getInt(2);
+    						obj[2]=rs.getString(3);
+    						obj[3]=rs.getDate(4);
+    						obj[4]=rs.getDate(5);
+    						obj[5]=rs.getInt(6);
+    						obj[6]=rs.getDouble(7);
+    						obj[7]=rs.getDate(8);
+    						obj[8]=rs.getDouble(9);
+    						obj[9]=rs.getDouble(10);
+    				        dm.addRow(obj);
+    					}
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
 
                 }
             }
@@ -320,17 +306,18 @@ public class FrmBaoCao extends JFrame implements ActionListener{
         pnSouth.setPreferredSize(new Dimension(900,100));
 
         pnBorder.add(pnNorth,BorderLayout.NORTH);
-        pnBorder.add(scrollPane,BorderLayout.CENTER);
+        pnBorder.add(splitPane,BorderLayout.CENTER);
         pnBorder.add(pnSouth,BorderLayout.SOUTH);
         
         contentPane = new JPanel();
 		contentPane.add(pnBorder);
 		add(contentPane);
 		
-		btnThoat.addActionListener(this);
 		btnHienThiBieuDo.addActionListener(this);
 		btnXuatBaoCao.addActionListener(this);
 		btnLoc.addActionListener(this);
+		table.addMouseListener(this);
+		itXemdichVu.addActionListener(this);
 		
 	}
 	public static void main(String[] args) {
@@ -349,53 +336,53 @@ public class FrmBaoCao extends JFrame implements ActionListener{
             }
 		}else if(o.equals(btnLoc)) {
 			 try {
-		            Connection con = ConnectDB.getInstance().getConnection();
-		            java.sql.Date fromDate = new java.sql.Date(csTu.getDate().getTime());
+					Connection con = ConnectDB.getInstance().getConnection();
+					java.sql.Date fromDate = new java.sql.Date(csTu.getDate().getTime());
 		            java.sql.Date toDate = new java.sql.Date(csDen.getDate().getTime());
-		            String sql = "SELECT c.MAHD, c.MAPHONG, kh.HOTEN, c.NGAYDAT, c.NGAYTRA, c.SONGUOI, p.GIA, h.NGAYLAPHD ,ct.SOLUONG ,dv.TENDV ,dv.GIA " +
+					String sql = "SELECT c.MAHD, c.MAPHONG, kh.HOTEN, c.NGAYDAT, c.NGAYTRA, c.SONGUOI, p.GIA, h.NGAYLAPHD, SUM(ct.SOLUONG * dv.GIA) AS TONGTIENDICHVU, p.GIA + SUM(ct.SOLUONG * dv.GIA) AS TONGTIEN " +
 		                    "FROM ChiTietDatPhong AS c " +
 		                    "JOIN Phong AS p ON c.MAPHONG = p.MAPHONG " +
 		                    "JOIN HoaDon AS h ON c.MAHD=h.MAHD " +
 		                    "JOIN ChiTietSuDungDichVu ct ON h.MAHD=ct.MAHD " +
 		                    "JOIN KhachHang AS kh ON h.MAKH=kh.MAKH " +
-		                    "JOIN DichVu AS dv ON ct.MADV=dv.MADV " +
-		                    "WHERE h.NGAYLAPHD BETWEEN ? AND ?";
-		            PreparedStatement ps = con.prepareStatement(sql);
+							"JOIN DichVu AS dv ON ct.MADV=dv.MADV " +
+							"WHERE h.NGAYLAPHD BETWEEN ? AND ? " +
+		                    "GROUP BY c.MAHD, c.MAPHONG, kh.HOTEN, c.NGAYDAT, c.NGAYTRA, c.SONGUOI, p.GIA, h.NGAYLAPHD ";
+					PreparedStatement ps = con.prepareStatement(sql);
 		            ps.setDate(1, fromDate);
 		            ps.setDate(2, toDate);
 		            DefaultTableModel dm=(DefaultTableModel) table.getModel();
 		            dm.setRowCount(0);
 		            ResultSet rs = ps.executeQuery();
 		            Object obj[]=new Object[15];
-		            while (rs.next()) {
-		                obj[0]=rs.getString(1);
-		                obj[1]=rs.getInt(2);
-		                obj[2]=rs.getString(3);
-		                obj[3]=rs.getDate(4);
-		                obj[4]=rs.getDate(5);
-		                obj[5]=rs.getInt(6);
-		                obj[6]=rs.getDouble(7);
-		                obj[7]=rs.getDate(8);
-		                obj[8]=rs.getInt(9);
-		                obj[9]=rs.getString(10);
-		                obj[10]=rs.getDouble(11);
-		                obj[11]=rs.getDouble(9) * rs.getDouble(11); // tính tổng tiền dịch vụ
-		                obj[12]=rs.getDouble(7) + rs.getDouble(11) * rs.getDouble(9); // tính tổng tiền bao gồm phòng và dịch vụ
-		                dm.addRow(obj);
-		            }
-		        } catch (SQLException ex) {
-		            ex.printStackTrace();
-		        }
+					while (rs.next()) {
+						obj[0]=rs.getString(1);
+						obj[1]=rs.getInt(2);
+						obj[2]=rs.getString(3);
+						obj[3]=rs.getDate(4);
+						obj[4]=rs.getDate(5);
+						obj[5]=rs.getInt(6);
+						obj[6]=rs.getDouble(7);
+						obj[7]=rs.getDate(8);
+						obj[8]=rs.getDouble(9);
+						obj[9]=rs.getDouble(10);
+				        dm.addRow(obj);
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			 
 		  }else if(o.equals(btnHienThiBieuDo)) {
 			  try {
 				    Connection con = ConnectDB.getInstance().getConnection();
-				    String sql = "SELECT c.MAPHONG, SUM(p.GIA) AS TONGTIENPHONG, SUM(ct.SOLUONG * dv.GIA) AS TONGTIENDICHVU " +
-				                 "FROM ChiTietDatPhong AS c " +
-				                 "JOIN Phong AS p ON c.MAPHONG = p.MAPHONG " +
-				                 "JOIN HoaDon AS h ON c.MAHD=h.MAHD " +
-				                 "JOIN ChiTietSuDungDichVu ct ON h.MAHD=ct.MAHD " +
-				                 "JOIN DichVu AS dv ON ct.MADV=dv.MADV " +
-				                 "GROUP BY c.MAPHONG";
+				    String sql = "SELECT c.MAHD, c.MAPHONG, kh.HOTEN, c.NGAYDAT, c.NGAYTRA, c.SONGUOI, p.GIA, h.NGAYLAPHD, SUM(ct.SOLUONG * dv.GIA) AS TONGTIENDICHVU, p.GIA + SUM(ct.SOLUONG * dv.GIA) AS TONGTIEN " +
+		                    "FROM ChiTietDatPhong AS c " +
+		                    "JOIN Phong AS p ON c.MAPHONG = p.MAPHONG " +
+		                    "JOIN HoaDon AS h ON c.MAHD=h.MAHD " +
+		                    "JOIN ChiTietSuDungDichVu ct ON h.MAHD=ct.MAHD " +
+		                    "JOIN KhachHang AS kh ON h.MAKH=kh.MAKH " +
+							"JOIN DichVu AS dv ON ct.MADV=dv.MADV " +
+		                    "GROUP BY c.MAHD, c.MAPHONG, kh.HOTEN, c.NGAYDAT, c.NGAYTRA, c.SONGUOI, p.GIA, h.NGAYLAPHD";
 				    Statement sta = con.createStatement();
 				    ResultSet rs = sta.executeQuery(sql);
 
@@ -403,7 +390,7 @@ public class FrmBaoCao extends JFrame implements ActionListener{
 				    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 				    while (rs.next()) {
 				        int maPhong = rs.getInt("MAPHONG");
-				        double tongTienPhong = rs.getDouble("TONGTIENPHONG");
+				        double tongTienPhong = rs.getDouble("GIA");
 				        double tongTienDichVu = rs.getDouble("TONGTIENDICHVU");
 				        double tongTien = tongTienPhong + tongTienDichVu;
 				        dataset.addValue(tongTien, "Tổng tiền", "Phòng " + maPhong);
@@ -421,8 +408,32 @@ public class FrmBaoCao extends JFrame implements ActionListener{
 				    ex.printStackTrace();
 				}
 
-		  }else if(o.equals(btnThoat)) {
-			  
+		  }else if(o.equals(itXemdichVu)) {
+			  int rowIndex=table.getSelectedRow();
+			  if(rowIndex>=0) {
+				  String maHD=table.getValueAt(rowIndex, 0).toString();
+				  PreparedStatement sta=null;
+				  try {
+					  Connection con=ConnectDB.getInstance().getConnection();
+					  DefaultTableModel dm=(DefaultTableModel) tableDichVu.getModel();
+			          dm.setRowCount(0);
+					  String sql ="Select ctdv.MAHD, dv.TENDV, ctdv.SOLUONG, dv.GIA from DichVu dv join ChiTietSuDungDichVu ctdv on dv.MADV = ctdv.MADV where ctdv.MAHD= ?";				  
+					  sta=con.prepareStatement(sql);
+					  sta.setString(1, maHD);
+					  ResultSet rs=sta.executeQuery();
+					  Object obj[]=new Object[15];
+					  while(rs.next()) {
+						  obj[0]=rs.getString(1);
+						  obj[1]=rs.getString(2);
+						  obj[2]=rs.getInt(3);
+						  obj[3]=rs.getDouble(4);
+						  dm.addRow(obj);
+					  }
+				  }catch (Exception e1) {
+					// TODO: handle exception
+					  e1.printStackTrace();
+				}
+			  }
 		  }
 		
 		
@@ -430,16 +441,15 @@ public class FrmBaoCao extends JFrame implements ActionListener{
 	public void joinWithPhong() {
 		try {
 			Connection con = ConnectDB.getInstance().getConnection();
-			String sql = "SELECT c.MAHD, c.MAPHONG, kh.HOTEN, c.NGAYDAT, c.NGAYTRA, c.SONGUOI, p.GIA, h.NGAYLAPHD ,ct.SOLUONG ,dv.TENDV ,dv.GIA " +
+			String sql = "SELECT c.MAHD, c.MAPHONG, kh.HOTEN, c.NGAYDAT, c.NGAYTRA, c.SONGUOI, p.GIA, h.NGAYLAPHD, SUM(ct.SOLUONG * dv.GIA) AS TONGTIENDICHVU, p.GIA + SUM(ct.SOLUONG * dv.GIA) AS TONGTIEN " +
                     "FROM ChiTietDatPhong AS c " +
                     "JOIN Phong AS p ON c.MAPHONG = p.MAPHONG " +
                     "JOIN HoaDon AS h ON c.MAHD=h.MAHD " +
                     "JOIN ChiTietSuDungDichVu ct ON h.MAHD=ct.MAHD " +
                     "JOIN KhachHang AS kh ON h.MAKH=kh.MAKH " +
-					"JOIN DichVu AS dv ON ct.MADV=dv.MADV";
+					"JOIN DichVu AS dv ON ct.MADV=dv.MADV " +
+                    "GROUP BY c.MAHD, c.MAPHONG, kh.HOTEN, c.NGAYDAT, c.NGAYTRA, c.SONGUOI, p.GIA, h.NGAYLAPHD";
 			Statement sta = con.createStatement();
-			DefaultTableModel dm=(DefaultTableModel) table.getModel();
-			dm.getDataVector().removeAllElements();
 			ResultSet rs = sta.executeQuery(sql);
 			Object obj[]=new Object[15];
 			while (rs.next()) {
@@ -451,12 +461,8 @@ public class FrmBaoCao extends JFrame implements ActionListener{
 				obj[5]=rs.getInt(6);
 				obj[6]=rs.getDouble(7);
 				obj[7]=rs.getDate(8);
-				obj[8]=rs.getInt(9);
-				obj[9]=rs.getString(10);
-				obj[10]=rs.getDouble(11);
-				obj[11]=rs.getDouble(9) * rs.getDouble(11); // tính tổng tiền dịch vụ
-		        obj[12]=rs.getDouble(7) + rs.getDouble(11) * rs.getDouble(9); // tính tổng tiền bao gồm phòng và dịch vụ
-//				dm.addRow(obj);
+				obj[8]=rs.getDouble(9);
+				obj[9]=rs.getDouble(10);
 		        model.addRow(obj);
 			}
 		} catch (SQLException e) {
@@ -467,8 +473,44 @@ public class FrmBaoCao extends JFrame implements ActionListener{
 	public void tinhTongTien() {
 		double tongTien=0;
         for(int i=0;i<model.getRowCount();i++) {
-        	double thanhTien=Double.parseDouble(model.getValueAt(i, 12).toString());
+        	double thanhTien=Double.parseDouble(model.getValueAt(i, 9).toString());
         	tongTien+=thanhTien;
-        }txtTongTien.setText(String.valueOf(tongTien));
+        }txtTongTien.setText(formatTien(tongTien));
+	}
+
+	public String formatTien(double tien) {
+		DecimalFormat df = new DecimalFormat("#,##0VND");
+		String s = df.format(tien);
+		return s;
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		if (SwingUtilities.isRightMouseButton(e)) {
+			int r = table.rowAtPoint(e.getPoint());
+			if (r >= 0 && r < table.getRowCount()) {
+				popupMenu.show(e.getComponent(), e.getX(), e.getY());
+			}
+		}
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

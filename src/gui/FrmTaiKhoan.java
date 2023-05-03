@@ -89,6 +89,7 @@ public class FrmTaiKhoan extends JFrame implements ActionListener, MouseListener
 		String cols[] = { "Mã NV", "Mật Khẩu", "Quyền" };
 		model = new DefaultTableModel(cols, 0);
 		table = new JTable(model);
+		table.setRowHeight(25);
 		JScrollPane js = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		js.setPreferredSize(new Dimension(600, 450));

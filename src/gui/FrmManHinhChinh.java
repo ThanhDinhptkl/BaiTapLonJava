@@ -33,35 +33,33 @@ import entity.TaiKhoan;
 
 public class FrmManHinhChinh extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private JButton btnHome, btnPhong, btnDichVu, btnDangXuat, btnDoiMK,btnNhanVien,btnBaoCao,selectedButton;
+	private JButton btnHome, btnPhong, btnDichVu, btnDangXuat, btnDoiMK, btnNhanVien, btnKhachHang, btnBaoCao,
+			selectedButton;
 	public static JButton btnTaiKhoan;
 	private JTextField txtMaNV, txtHoTenNV;
 	private Color bgColor = new Color(255, 255, 255);
-	
+
 	private JPanel pnLeft;
 	private JPanel pnBorder;
 	private JPanel pnHome;
 	private JPanel pnDichVu;
 	private JPanel pnPhong;
 	private JPanel pnTaiKhoan;
-
 	private JPanel pnBaoCao;
+	private JPanel pnKhachHang;
+	private JPanel pnQLNhanVien;
 
-
-	private TaiKhoan TaiKhoanlogin;
+	public static TaiKhoan TaiKhoanlogin;
 	private Bus_NhanVien nhanVien_bus = new Bus_NhanVien();
 	private Bus_TaiKhoan taiKhoan_bus = new Bus_TaiKhoan();
 	private NhanVien nhanVienLogin;
-	private JPanel pnQLNhanVien;
 
 	private FrmNhanVien frmNhanVien = new FrmNhanVien();
 	private FrmTaiKhoan frmTaiKhoan = new FrmTaiKhoan();
 	private FrmQLPhong frmQLPhong = new FrmQLPhong();
 	private FrmDichVu frmDichVu = new FrmDichVu();
-
-	private FrmBaoCao frmBaoCao=new FrmBaoCao();
-
-	
+	private FrmBaoCao frmBaoCao = new FrmBaoCao();
+	private FrmKhachHang frmKhachHang = new FrmKhachHang();
 
 	public FrmManHinhChinh(TaiKhoan taiKhoan) {
 		TaiKhoanlogin = taiKhoan;
@@ -83,7 +81,6 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 	}
 
 	public void taoMenuTrai() {
-		
 		pnBorder = new JPanel();
 		add(pnBorder, BorderLayout.CENTER);
 		pnBorder.setLayout(new BorderLayout());
@@ -94,16 +91,16 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		pnLeft.setBackground(new Color(39, 60, 117));
 
 		btnHome = new JButton("Home");
-		btnPhong = new JButton("Sơ đồ phòng");
+		btnPhong = new JButton("Phòng");
+		btnKhachHang = new JButton("Khách Hàng");
 		btnNhanVien = new JButton("Nhân Viên");
 		btnTaiKhoan = new JButton("Tài Khoản");
 		btnDichVu = new JButton("Dịch Vụ");
-		btnBaoCao=new JButton("Báo Cáo");
+		btnBaoCao = new JButton("Báo Cáo");
 
 		// set button styles
 		Font font = new Font("Arial", Font.PLAIN, 16);
 		Dimension size = new Dimension(150, 40);
-		
 		Color fgColor = new Color(39, 60, 117);
 
 		btnHome.setFont(font);
@@ -120,6 +117,11 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		btnPhong.setPreferredSize(size);
 		btnPhong.setBackground(bgColor);
 		btnPhong.setForeground(fgColor);
+
+		btnKhachHang.setFont(font);
+		btnKhachHang.setPreferredSize(size);
+		btnKhachHang.setBackground(bgColor);
+		btnKhachHang.setForeground(fgColor);
 
 		btnTaiKhoan.setFont(font);
 		btnTaiKhoan.setPreferredSize(size);
@@ -138,33 +140,33 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 
 		// add icons to buttons
 		Icon homeIcon = new ImageIcon("img/home1.png");
-		Image homeImage=((ImageIcon) homeIcon).getImage();
-		Image newHomeImage=homeImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-		Icon newHomeIcon=new ImageIcon(newHomeImage);
+		Image homeImage = ((ImageIcon) homeIcon).getImage();
+		Image newHomeImage = homeImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		Icon newHomeIcon = new ImageIcon(newHomeImage);
 		Icon nhanVienIcon = new ImageIcon("img/nhanvien.png");
-		Image nvImage=((ImageIcon) nhanVienIcon).getImage();
-		Image newNVImg=nvImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-		Icon newNVIcon=new ImageIcon(newNVImg);
+		Image nvImage = ((ImageIcon) nhanVienIcon).getImage();
+		Image newNVImg = nvImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+		Icon newNVIcon = new ImageIcon(newNVImg);
 		Icon datPhongIcon = new ImageIcon("img/datphong.png");
-		Image dpimg=((ImageIcon) datPhongIcon).getImage();
-		Image newdpimg=dpimg.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-		Icon newdpicon=new ImageIcon(newdpimg);
+		Image dpimg = ((ImageIcon) datPhongIcon).getImage();
+		Image newdpimg = dpimg.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+		Icon newdpicon = new ImageIcon(newdpimg);
 		Icon phongIcon = new ImageIcon("img/phong.png");
-		Image pimg=((ImageIcon) phongIcon).getImage();
-		Image newpimg=pimg.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-		Icon newpicon=new ImageIcon(newpimg);
+		Image pimg = ((ImageIcon) phongIcon).getImage();
+		Image newpimg = pimg.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+		Icon newpicon = new ImageIcon(newpimg);
 		Icon taiKhoanIcon = new ImageIcon("img/taikhoan.png");
-		Image tkimg=((ImageIcon) taiKhoanIcon).getImage();
-		Image newtkimg=tkimg.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-		Icon newtkicon=new ImageIcon(newtkimg);
+		Image tkimg = ((ImageIcon) taiKhoanIcon).getImage();
+		Image newtkimg = tkimg.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+		Icon newtkicon = new ImageIcon(newtkimg);
 		Icon dichVuIcon = new ImageIcon("img/dichvu.png");
-		Image dvimg=((ImageIcon) dichVuIcon).getImage();
-		Image newdvimg=dvimg.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-		Icon newdvicon=new ImageIcon(newdvimg);
+		Image dvimg = ((ImageIcon) dichVuIcon).getImage();
+		Image newdvimg = dvimg.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+		Icon newdvicon = new ImageIcon(newdvimg);
 		Icon baoCaoIcon = new ImageIcon("img/baocao.png");
-		Image bcimg=((ImageIcon) baoCaoIcon).getImage();
-		Image newbcimg=bcimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-		Icon newbcicon=new ImageIcon(newbcimg);
+		Image bcimg = ((ImageIcon) baoCaoIcon).getImage();
+		Image newbcimg = bcimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		Icon newbcicon = new ImageIcon(newbcimg);
 
 		btnHome.setIcon(newHomeIcon);
 		btnNhanVien.setIcon(newNVIcon);
@@ -175,18 +177,20 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 
 		pnLeft.add(btnHome);
 		pnLeft.add(btnPhong);
+		pnLeft.add(btnKhachHang);
 		pnLeft.add(btnNhanVien);
 		pnLeft.add(btnTaiKhoan);
 		pnLeft.add(btnDichVu);
 		pnLeft.add(btnBaoCao);
-		
-		btnHome.setBounds(25,20,150,40);
-		btnPhong.setBounds(25,70,150,40);
-		btnNhanVien.setBounds(25,170,150,40);
-		btnTaiKhoan.setBounds(25,220,150,40);
-		btnDichVu.setBounds(25,270,150,40);
-		btnBaoCao.setBounds(25,320,150,40);
-		pnLeft.setPreferredSize(new Dimension(200,700));
+
+		btnHome.setBounds(25, 20, 150, 40);
+		btnPhong.setBounds(25, 70, 150, 40);
+		btnKhachHang.setBounds(25, 120, 150, 40);
+		btnNhanVien.setBounds(25, 170, 150, 40);
+		btnTaiKhoan.setBounds(25, 220, 150, 40);
+		btnDichVu.setBounds(25, 270, 150, 40);
+		btnBaoCao.setBounds(25, 320, 150, 40);
+		pnLeft.setPreferredSize(new Dimension(200, 700));
 
 	}
 
@@ -240,7 +244,7 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		bNhanVien.add(bDangXuat);
 		bDangXuat.add(btnDangXuat);
 		bDangXuat.add(btnDoiMK);
-		bNhanVien.setBounds(10,550,180,100);
+		bNhanVien.setBounds(10, 550, 180, 100);
 	}
 
 	public void taoPanelMain() {
@@ -250,21 +254,21 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 
 		pnQLNhanVien = new JPanel();
 		pnQLNhanVien.add(frmNhanVien.contentPane);
-		
+
 		pnTaiKhoan = new JPanel();
 		pnTaiKhoan.add(frmTaiKhoan.contentPane);
-		
-		
+
 		pnPhong = new JPanel();
 		pnPhong.add(frmQLPhong.contentPane);
 		
+		pnKhachHang = new JPanel();
+		pnKhachHang.add(frmKhachHang.contentPane);
+
 		pnDichVu = new JPanel();
 		pnDichVu.add(frmDichVu.contentPane);
 
-		
-		pnBaoCao=new JPanel();
+		pnBaoCao = new JPanel();
 		pnBaoCao.add(frmBaoCao.contentPane);
-
 
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new CardLayout());
@@ -272,23 +276,23 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 		mainPanel.add(pnQLNhanVien, "pnQL NhanVien");
 		mainPanel.add(pnTaiKhoan, "Panel TaiKhoan");
 		mainPanel.add(pnPhong, "Panel Phong");
+		mainPanel.add(pnKhachHang, "Panel KhachHang");
 		mainPanel.add(pnDichVu, "Panel DichVu");
-
-		mainPanel.add(pnBaoCao,"Panel BaoCao");
+		mainPanel.add(pnBaoCao, "Panel BaoCao");
 
 		pnBorder.add(mainPanel, BorderLayout.CENTER);
 	}
 
 	public void taoSuKienChoButtonMenuTrai() {
-		
+
 		btnHome.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				CardLayout c = (CardLayout) (pnHome.getParent().getLayout());
 				c.show(pnHome.getParent(), "Panel Home");
-				if(selectedButton!=null) {
+				if (selectedButton != null) {
 					selectedButton.setBackground(bgColor);
 				}
-				selectedButton=btnHome;
+				selectedButton = btnHome;
 				selectedButton.setBackground(Color.green);
 			}
 		});
@@ -297,63 +301,73 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 			public void mousePressed(MouseEvent e) {
 				CardLayout c = (CardLayout) (pnQLNhanVien.getParent().getLayout());
 				c.show(pnQLNhanVien.getParent(), "pnQL NhanVien");
-				if(selectedButton!=null) {
+				if (selectedButton != null) {
 					selectedButton.setBackground(bgColor);
 				}
-				selectedButton=btnNhanVien;
+				selectedButton = btnNhanVien;
 				selectedButton.setBackground(Color.green);
 			}
 		});
-		
+
 		btnPhong.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				CardLayout c = (CardLayout) (pnPhong.getParent().getLayout());
 				c.show(pnPhong.getParent(), "Panel Phong");
-				if(selectedButton!=null) {
+				if (selectedButton != null) {
 					selectedButton.setBackground(bgColor);
 				}
-				selectedButton=btnPhong;
+				selectedButton = btnPhong;
 				selectedButton.setBackground(Color.green);
 			}
 		});
 		
+		btnKhachHang.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				CardLayout c = (CardLayout) (pnKhachHang.getParent().getLayout());
+				c.show(pnKhachHang.getParent(), "Panel KhachHang");
+				if (selectedButton != null) {
+					selectedButton.setBackground(bgColor);
+				}
+				selectedButton = btnKhachHang;
+				selectedButton.setBackground(Color.green);
+			}
+		});
+
 		btnDichVu.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				CardLayout c = (CardLayout) (pnDichVu.getParent().getLayout());
 				c.show(pnDichVu.getParent(), "Panel DichVu");
-				if(selectedButton!=null) {
+				if (selectedButton != null) {
 					selectedButton.setBackground(bgColor);
 				}
-				selectedButton=btnDichVu;
+				selectedButton = btnDichVu;
 				selectedButton.setBackground(Color.green);
 			}
 		});
-		
+
 		btnTaiKhoan.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				CardLayout c = (CardLayout) (pnTaiKhoan.getParent().getLayout());
 				c.show(pnTaiKhoan.getParent(), "Panel TaiKhoan");
-				if(selectedButton!=null) {
+				if (selectedButton != null) {
 					selectedButton.setBackground(bgColor);
 				}
-				selectedButton=btnTaiKhoan;
+				selectedButton = btnTaiKhoan;
 				selectedButton.setBackground(Color.green);
 			}
 		});
 
-		
 		btnBaoCao.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				CardLayout c = (CardLayout) (pnBaoCao.getParent().getLayout());
 				c.show(pnBaoCao.getParent(), "Panel BaoCao");
-				if(selectedButton!=null) {
+				if (selectedButton != null) {
 					selectedButton.setBackground(bgColor);
 				}
-				selectedButton=btnBaoCao;
+				selectedButton = btnBaoCao;
 				selectedButton.setBackground(Color.green);
 			}
 		});
-
 
 	}
 
@@ -376,8 +390,7 @@ public class FrmManHinhChinh extends JFrame implements ActionListener {
 				String matKhauMoi = JOptionPane.showInputDialog("Nhập mật khẩu mới");
 				if (JOptionPane.showConfirmDialog(this, "Bạn muốn đổi mật khẩu mới", "Thông báo",
 						JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-					TaiKhoan tkMoi = new TaiKhoan(TaiKhoanlogin.getMaTK(), matKhauMoi,
-							TaiKhoanlogin.getQuyen());
+					TaiKhoan tkMoi = new TaiKhoan(TaiKhoanlogin.getMaTK(), matKhauMoi, TaiKhoanlogin.getQuyen());
 					taiKhoan_bus.capNhat(tkMoi);
 				} else {
 					JOptionPane.showMessageDialog(this, "Cập nhật thất bại");

@@ -269,4 +269,30 @@ public class Dao_Phong implements I_Phong {
 		return n > 0;
 	}
 
+	@Override
+	public boolean capNhatTrangThai(boolean tt, String maP) {
+		PreparedStatement sta = null;
+		int n = 0;
+		try {
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			String sql = "update Phong set TRANGTHAI = ? where MAPHONG = ?";
+			sta = con.prepareStatement(sql);
+
+			sta.setBoolean(1, tt);
+			sta.setString(2, maP);		
+
+			n = sta.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				sta.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return n > 0;
+	}
+
 }

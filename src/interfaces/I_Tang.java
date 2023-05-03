@@ -16,4 +16,6 @@ public interface I_Tang {
 	public boolean capNhat(Tang t);
 
 	public boolean xoa(int id);
+	
+	public int count();
 }
